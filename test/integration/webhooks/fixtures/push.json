@@ -1,0 +1,10 @@
+{ "ref": "refs/heads/master",
+  "repository": {
+    "id": 55721017,
+    "name": "exso-test",
+    "full_name": "microadam/exso-test",
+    "owner": {
+      "name": "microadam"
+    }
+  }
+}

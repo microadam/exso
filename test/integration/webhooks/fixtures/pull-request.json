@@ -1,0 +1,26 @@
+{
+  "action": "synchronize",
+  "number": 11,
+  "pull_request": {
+    "number": 11,
+    "title": "Adding conflicting C",
+    "user": {
+      "login": "microadam"
+    },
+    "head": {
+      "ref": "feature/add-c",
+      "sha": "5ba66f068737fe24e37ebb1ea4f6e9b5cdc09624",
+      "repo": {
+        "name": "exso-test",
+        "owner": {
+          "login": "microadam"
+        }
+      }
+    },
+    "base": {
+      "ref": "master"
+    },
+    "mergeable": true,
+    "comments": 1
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "exso",
+  "version": "1.0.0",
+  "description": "\"exsolvo\" to release",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul cover _mocha $(find . -path ./node_modules -prune -o -name '*.test.js')",
+    "posttest": "istanbul check-coverage && rm -rf coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.0.0-rc.3",
+    "bunyan": "^1.8.0",
+    "express": "^4.13.4",
+    "github-webhook-handler": "^0.5.0",
+    "github4": "^0.5.4",
+    "lodash.findwhere": "^3.1.0",
+    "lodash.pluck": "^3.1.2",
+    "service-locator": "^1.0.0"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.3",
+    "mc-logger": "0.0.0",
+    "mocha": "^2.4.5",
+    "nock": "^8.0.0",
+    "rewire": "^2.5.1",
+    "supertest": "^1.2.0"
+  }
+}
