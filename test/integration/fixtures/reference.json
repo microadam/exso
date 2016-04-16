@@ -1,0 +1,6 @@
+{ "ref": "refs/heads/release/test-bla",
+  "url": "https://api.github.com/repos/microadam/exso-test/git/refs/heads/release/test-bla",
+  "object": {
+    "sha": "b0e588f7604018f90024ca9bc80f181cad2a2cfe"
+  }
+}

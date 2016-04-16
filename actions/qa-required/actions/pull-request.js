@@ -5,7 +5,9 @@ function createAction() {
   var action =
     { check: function (ghAction, pr, cb) {
         var actions = [ 'opened', 'synchronize' ]
-        if (actions.indexOf(ghAction) > -1) {
+          , isReleasePr = pr.branch.indexOf('release/') === 0
+
+        if (actions.indexOf(ghAction) > -1 && !isReleasePr) {
           return cb(null, true)
         }
         cb(null, false)

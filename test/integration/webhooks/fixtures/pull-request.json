@@ -4,6 +4,7 @@
   "pull_request": {
     "number": 11,
     "title": "Adding conflicting C",
+    "body": "some body",
     "user": {
       "login": "microadam"
     },

@@ -14,7 +14,7 @@ describe('issue comment', function () {
     serviceLocator.register('logger', logger)
   })
 
-  it('should execute an issue comment action a generate a comment object', function (done) {
+  it('should execute an issue comment action and generate a comment object', function (done) {
 
     var execCalled = false
       , action =

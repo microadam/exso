@@ -1,18 +1,18 @@
 var assert = require('assert')
   , action = require('../../actions/pull-request')()
 
-describe('pull request action', function () {
+describe('qa-required pull request action', function () {
 
-  it('should pass check when github action is "opened"', function (done) {
-    action.check('opened', {}, function (error, shouldExec) {
+  it('should pass check when github action is "opened" and not release PR', function (done) {
+    action.check('opened', { branch: 'feature/test' }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
       done()
     })
   })
 
-  it('should pass check when github action is "synchronize"', function (done) {
-    action.check('synchronize', {}, function (error, shouldExec) {
+  it('should pass check when github action is "synchronize" and not release PR', function (done) {
+    action.check('synchronize', { branch: 'feature/test' }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
       done()
@@ -20,7 +20,15 @@ describe('pull request action', function () {
   })
 
   it('should not pass check when github action is not "opened" or "synchronize"', function (done) {
-    action.check('closed', {}, function (error, shouldExec) {
+    action.check('closed', { branch: 'feature/test' }, function (error, shouldExec) {
+      if (error) return done(error)
+      assert.equal(shouldExec, false, 'shouldExec should be false')
+      done()
+    })
+  })
+
+  it('should not pass check when is release PR', function (done) {
+    action.check('synchronize', { branch: 'release/test' }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
       done()

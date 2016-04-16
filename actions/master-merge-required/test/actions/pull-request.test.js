@@ -1,7 +1,7 @@
 var assert = require('assert')
   , action = require('../../actions/pull-request')()
 
-describe('pull request action', function () {
+describe('master-merge-required pull request action', function () {
 
   it('should pass check when github action is "opened"', function (done) {
     action.check('opened', {}, function (error, shouldExec) {

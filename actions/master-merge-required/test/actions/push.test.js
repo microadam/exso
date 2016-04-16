@@ -2,7 +2,7 @@ var assert = require('assert')
   , rewire = require('rewire')
   , createAction = rewire('../../actions/push')
 
-describe('push action', function () {
+describe('master-merge-required push action', function () {
 
   it('should pass check when branch ref is master', function (done) {
     createAction().check('', { ref: 'refs/heads/master' }, function (error, shouldExec) {

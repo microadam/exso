@@ -1,7 +1,7 @@
 var assert = require('assert')
   , createAction = require('../../actions/comment')
 
-describe('comment action', function () {
+describe('qa-required comment action', function () {
 
   it('should pass check when github action is "created", contains '
     + 'a thumbs up and author is not QAer', function (done) {

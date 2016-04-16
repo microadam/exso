@@ -55,10 +55,12 @@ describe('pull request', function () {
               , exec: function (pr) {
                   assert.equal(pr instanceof PullRequest, true, 'is not a PullRequest')
                   assert.equal(pr.baseRef, 'master')
+                  assert.equal(pr.branch, 'feature/add-c')
                   assert.equal(pr.headSha, '5ba66f068737fe24e37ebb1ea4f6e9b5cdc09624')
                   assert.equal(pr.owner, 'microadam')
                   assert.equal(pr.repo, 'exso-test')
                   assert.equal(pr.title, 'Adding conflicting C')
+                  assert.equal(pr.body, 'some body')
                   assert.equal(pr.number, 11)
                   assert.equal(pr.author, 'microadam')
                   assert.equal(pr.numComments, 1)
@@ -95,7 +97,34 @@ describe('pull request', function () {
 
     nock('https://api.github.com')
       .patch('/repos/microadam/exso-test/pulls/11?access_token=' + serviceLocator.secrets.githubToken
-      , { title: 'Adding conflicting C', state: 'closed' })
+      , { state: 'closed' })
+      .reply(200)
+
+    runTest(action, function (error) {
+      if (error) return done(error)
+    })
+
+  })
+
+  it('should be able to update PR description', function (done) {
+
+    var action =
+          { name: 'test'
+          , actions:
+            { 'pull_request':
+              { check: function (ghAction, pr, cb) {
+                  cb(null, true)
+                }
+              , exec: function (pr) {
+                  pr.updateDescription('test', done)
+                }
+              }
+            }
+          }
+
+    nock('https://api.github.com')
+      .patch('/repos/microadam/exso-test/pulls/11?access_token=' + serviceLocator.secrets.githubToken
+      , { body: 'test' })
       .reply(200)
 
     runTest(action, function (error) {
@@ -263,6 +292,36 @@ describe('pull request', function () {
         , 'target_url': 'http://google.com'
         })
       .reply(200)
+
+    runTest(action, function (error) {
+      if (error) return done(error)
+    })
+  })
+
+  it('should be able to get the current status', function (done) {
+    var action =
+          { name: 'test'
+          , actions:
+            { 'pull_request':
+              { check: function (ghAction, pr, cb) {
+                  cb(null, true)
+                }
+              , exec: function (pr) {
+                  pr.getCurrentStatus(function (error, status) {
+                    if (error) return done(error)
+                    assert.equal(status.state, 'success')
+                    done()
+                  })
+                }
+              }
+            }
+          }
+        , path = '/repos/microadam/exso-test/commits/'
+            + '5ba66f068737fe24e37ebb1ea4f6e9b5cdc09624/status?access_token=' + serviceLocator.secrets.githubToken
+
+    nock('https://api.github.com')
+      .get(path)
+      .reply(200, { state: 'success' })
 
     runTest(action, function (error) {
       if (error) return done(error)
