@@ -7,7 +7,6 @@ function createAction(serviceLocator) {
 
   var fns =
         { addToRelease: createAddToRelease(serviceLocator)
-        // , markFailedMergeAsSuccessful: markFailedMergeAsSuccessful
         // , removeFromRelease: removeFromRelease
         }
     , checkTriggerPhrase = triggerPhraseChecker(serviceLocator)

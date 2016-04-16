@@ -80,7 +80,7 @@ describe('trigger-phrase-checker', function () {
       , checkTriggerPhrase = createTriggerPhraseChecker(sl)
       , actionToTake = checkTriggerPhrase('@merge-user merged into release #22')
 
-    assert.deepEqual(actionToTake, { name: 'markFailedMergeAsSuccessful', value: 22 })
+    assert.deepEqual(actionToTake, { name: 'addToRelease', value: 22 })
   })
 
 })

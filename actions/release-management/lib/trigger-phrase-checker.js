@@ -13,7 +13,7 @@ function createTriggerPhraseChecker(serviceLocator) {
         [ 'addToRelease'
         , 'addToRelease'
         , 'addToRelease'
-        , 'markFailedMergeAsSuccessful'
+        , 'addToRelease'
         , 'removeFromRelease'
         ]
 
