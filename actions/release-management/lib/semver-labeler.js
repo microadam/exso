@@ -19,11 +19,15 @@ function createSemverLabeler() {
     if ('semver/' + semver === currentSemverLabel) return cb()
 
     function removeSemverLabel(cb) {
+      var indexOfLabel = releasePr.labels.indexOf(currentSemverLabel)
+      releasePr.labels.splice(indexOfLabel, 1)
       releasePr.removeLabel(currentSemverLabel, cb)
     }
 
     function addNewSemverLabel(cb) {
-      releasePr.addLabels([ 'semver/' + semver ], cb)
+      var label = 'semver/' + semver
+      releasePr.labels.push(label)
+      releasePr.addLabels([ label ], cb)
     }
 
     var tasks = []
