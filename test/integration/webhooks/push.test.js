@@ -17,7 +17,7 @@ describe('push', function () {
     serviceLocator.register('logger', logger)
   })
 
-  function runTest(serviceLocator, action, cb) {
+  function runTest (serviceLocator, action, cb) {
     bootstrap(serviceLocator, [ action ], function (error, serviceLocator) {
       if (error) return cb(error)
 

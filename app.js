@@ -2,8 +2,8 @@ var serviceLocator = require('service-locator')()
   , bunyan = require('bunyan')
   , logger = bunyan.createLogger({ name: 'exso' })
   , secrets =
-      { webhookSecret: process.env.WEBHOOK_SECRET
-      , githubToken: process.env.GITHUB_TOKEN
+      { webhookSecret: process.env.WEBHOOK_SECRET || 'adamjd'
+      , githubToken: process.env.GITHUB_TOKEN || '99006d77d102e79072cdec0d187ce00679f1b5b3'
       }
   , loadActions = require('./lib/action-loader')
   , bootstrap = require('./bootstrap')

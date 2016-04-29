@@ -3,10 +3,10 @@ var assert = require('assert')
 
 describe('qa-required comment action', function () {
 
-  it('should pass check when github action is "created", contains '
-    + 'a thumbs up and author is not QAer', function (done) {
+  it('should pass check when github action is "created", contains ' +
+     'a thumbs up and author is not QAer', function (done) {
 
-    var comment = { body: ':+1:', author: 'dave', issueAuthor: 'steve' }
+    var comment = { body: '👍', author: 'dave', issueAuthor: 'steve' }
     createAction().check('created', comment, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
@@ -15,7 +15,7 @@ describe('qa-required comment action', function () {
   })
 
   it('should not pass check when github action is not "created"', function (done) {
-    var comment = { body: ':+1:', author: 'dave', issueAuthor: 'steve' }
+    var comment = { body: '👍', author: 'dave', issueAuthor: 'steve' }
     createAction().check('not-created', comment, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
@@ -33,7 +33,7 @@ describe('qa-required comment action', function () {
   })
 
   it('should not pass check when author is the same as QAer', function (done) {
-    var comment = { body: ':+1:', author: 'dave', issueAuthor: 'dave' }
+    var comment = { body: '👍', author: 'dave', issueAuthor: 'dave' }
     createAction().check('created', comment, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
@@ -52,7 +52,7 @@ describe('qa-required comment action', function () {
           { labels: [ 'qa-required' ]
           , removeLabel: function (label, cb) {
               removeLabelsCalled = true
-              assert.equal(label,'qa-required')
+              assert.equal(label, 'qa-required')
               cb()
             }
           , addStatus: function (options, cb) {
@@ -65,7 +65,7 @@ describe('qa-required comment action', function () {
           { repoManager: function (owner, repo) {
               assert.equal(owner, 'repo-owner')
               assert.equal(repo, 'repo-name')
-              function getPull(number, cb) {
+              function getPull (number, cb) {
                 assert.equal(number, 11)
                 cb(null, pr)
               }
@@ -90,7 +90,7 @@ describe('qa-required comment action', function () {
           { labels: []
           , removeLabel: function (label, cb) {
               removeLabelsCalled = true
-              assert.equal(label,'qa-required')
+              assert.equal(label, 'qa-required')
               cb()
             }
           , addStatus: function (options, cb) {
@@ -102,7 +102,7 @@ describe('qa-required comment action', function () {
           { repoManager: function (owner, repo) {
               assert.equal(owner, 'repo-owner')
               assert.equal(repo, 'repo-name')
-              function getPull(number, cb) {
+              function getPull (number, cb) {
                 assert.equal(number, 11)
                 cb(null, pr)
               }

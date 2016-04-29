@@ -38,13 +38,13 @@ describe('release-management comment action', function () {
   it('should do nothing if no corresponding action is defined for a trigger phrase', function (done) {
 
     var reset = createAction.__set__('triggerPhraseChecker', function () {
-      return function checkTriggerPhrase() {
+      return function checkTriggerPhrase () {
         return 'fakeAction'
       }
     })
     , sl =
           { repoManager: function () {
-              function getPull(issueNumber, cb) {
+              function getPull (issueNumber, cb) {
                 cb(null, {})
               }
               return { getPull: getPull }
@@ -62,25 +62,29 @@ describe('release-management comment action', function () {
 
   it('should execute the "addToRelease" action', function (done) {
     var addToReleaseCalled = false
+      , sl = null
+      , action = null
+      , comment = null
+
     createAction.__set__('createAddToRelease', function () {
-      return function addToRelease(pr, comment, actionValue, cb) {
+      return function addToRelease (pr, comment, actionValue, cb) {
         addToReleaseCalled = true
         assert.equal(actionValue, 'test')
         cb()
       }
     })
 
-    var sl =
-          { authedUser: { username: 'test' }
-          , repoManager: function () {
-              function getPull(issueNumber, cb) {
-                cb(null, {})
-              }
-              return { getPull: getPull }
+    sl =
+        { authedUser: { username: 'test' }
+        , repoManager: function () {
+            function getPull (issueNumber, cb) {
+              cb(null, {})
             }
+            return { getPull: getPull }
           }
-      , action = createAction(sl)
-      , comment = { body: '@test add to release test' }
+        }
+    action = createAction(sl)
+    comment = { body: '@test add to release test' }
 
     action.exec(comment, function (error) {
       if (error) return done(error)

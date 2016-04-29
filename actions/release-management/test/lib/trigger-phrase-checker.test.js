@@ -83,4 +83,44 @@ describe('trigger-phrase-checker', function () {
     assert.deepEqual(actionToTake, { name: 'addToRelease', value: 22 })
   })
 
+  it('should return an action for "ready for staging"', function () {
+    var sl =
+          { authedUser: { username: 'merge-user' }
+          }
+      , checkTriggerPhrase = createTriggerPhraseChecker(sl)
+      , actionToTake = checkTriggerPhrase('@merge-user ready for staging')
+
+    assert.deepEqual(actionToTake, { name: 'readyForStaging', value: null })
+  })
+
+  it('should return an action for "on staging"', function () {
+    var sl =
+          { authedUser: { username: 'merge-user' }
+          }
+      , checkTriggerPhrase = createTriggerPhraseChecker(sl)
+      , actionToTake = checkTriggerPhrase('@merge-user on staging')
+
+    assert.deepEqual(actionToTake, { name: 'onStaging', value: null })
+  })
+
+  it('should return an action for "ready for production"', function () {
+    var sl =
+          { authedUser: { username: 'merge-user' }
+          }
+      , checkTriggerPhrase = createTriggerPhraseChecker(sl)
+      , actionToTake = checkTriggerPhrase('@merge-user ready for production')
+
+    assert.deepEqual(actionToTake, { name: 'readyForProduction', value: null })
+  })
+
+  it('should return an action for "on production"', function () {
+    var sl =
+          { authedUser: { username: 'merge-user' }
+          }
+      , checkTriggerPhrase = createTriggerPhraseChecker(sl)
+      , actionToTake = checkTriggerPhrase('@merge-user on production')
+
+    assert.deepEqual(actionToTake, { name: 'onProduction', value: null })
+  })
+
 })

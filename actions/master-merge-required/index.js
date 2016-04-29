@@ -3,7 +3,7 @@ module.exports = masterMergeRequired
 var createPushAction = require('./actions/push')
   , createPrAction = require('./actions/pull-request')
 
-function masterMergeRequired(serviceLocator) {
+function masterMergeRequired (serviceLocator) {
 
   return {
     name: 'master-merge-required'

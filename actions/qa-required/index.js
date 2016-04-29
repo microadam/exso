@@ -3,7 +3,7 @@ module.exports = qaRequired
 var createPrAction = require('./actions/pull-request')
   , createCommentAction = require('./actions/comment')
 
-function qaRequired(serviceLocator) {
+function qaRequired (serviceLocator) {
 
   return {
     name: 'qa-required'

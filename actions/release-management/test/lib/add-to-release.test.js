@@ -18,8 +18,8 @@ describe('release-management add-to-release', function () {
             }
           , addComment: function (comment, cb) {
               addCommentCalled = true
-              assert.equal(comment, '@microadam Not all status checks are passing.'
-                + ' Ensure they are before adding to a release.')
+              assert.equal(comment, '@microadam Not all status checks are passing.' +
+                ' Ensure they are before adding to a release.')
               cb()
             }
           }
@@ -49,9 +49,10 @@ describe('release-management add-to-release', function () {
               cb(null, { state: 'success' })
             }
           }
+      , addToRelease = null
 
     createAddToRelease.__set__('createReleaseCreator', function () {
-      return function createNewRelease(releaseNameNumber, pr, comment, repoManager, cb) {
+      return function createNewRelease (releaseNameNumber, pr, comment, repoManager, cb) {
         createNewReleaseCalled = true
         assert.equal(releaseNameNumber, null)
         assert.equal(pr.branch, 'branch')
@@ -61,7 +62,7 @@ describe('release-management add-to-release', function () {
       }
     })
 
-    var addToRelease = createAddToRelease(sl)
+    addToRelease = createAddToRelease(sl)
     addToRelease(pr, 'comment', null, function (error) {
       if (error) return done(error)
       assert.equal(createNewReleaseCalled, true, 'createNewRelease was not called')
@@ -86,9 +87,10 @@ describe('release-management add-to-release', function () {
               cb(null, { state: 'success' })
             }
           }
+      , addToRelease = null
 
     createAddToRelease.__set__('createReleaseCreator', function () {
-      return function createNewRelease(releaseNameNumber, pr, comment, repoManager, cb) {
+      return function createNewRelease (releaseNameNumber, pr, comment, repoManager, cb) {
         createNewReleaseCalled = true
         assert.equal(releaseNameNumber, 'dave')
         assert.equal(pr.branch, 'branch')
@@ -98,7 +100,7 @@ describe('release-management add-to-release', function () {
       }
     })
 
-    var addToRelease = createAddToRelease(sl)
+    addToRelease = createAddToRelease(sl)
     addToRelease(pr, 'comment', 'dave', function (error) {
       if (error) return done(error)
       assert.equal(createNewReleaseCalled, true, 'createNewRelease was not called')
@@ -123,9 +125,10 @@ describe('release-management add-to-release', function () {
               cb(null, { state: 'success' })
             }
           }
+      , addToRelease = null
 
     createAddToRelease.__set__('createExistingReleaseAdder', function () {
-      return function addToExistingRelease(releaseNameNumber, pr, comment, repoManager, cb) {
+      return function addToExistingRelease (releaseNameNumber, pr, comment, repoManager, cb) {
         addToExistingReleaseCalled = true
         assert.equal(releaseNameNumber, 1)
         assert.equal(pr.branch, 'branch')
@@ -135,7 +138,7 @@ describe('release-management add-to-release', function () {
       }
     })
 
-    var addToRelease = createAddToRelease(sl)
+    addToRelease = createAddToRelease(sl)
     addToRelease(pr, 'comment', 1, function (error) {
       if (error) return done(error)
       assert.equal(addToExistingReleaseCalled, true, 'addToExistingRelease was not called')

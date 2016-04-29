@@ -2,12 +2,20 @@ module.exports = createAction
 
 var triggerPhraseChecker = require('../lib/trigger-phrase-checker')
   , createAddToRelease = require('../lib/add-to-release')
+  , createReadyForStaging = require('../lib/ready-for-staging')
+  , createOnStaging = require('../lib/on-staging')
+  , createReadyForProduction = require('../lib/ready-for-production')
+  , createOnProduction = require('../lib/on-production')
 
-function createAction(serviceLocator) {
+function createAction (serviceLocator) {
 
   var fns =
         { addToRelease: createAddToRelease(serviceLocator)
         // , removeFromRelease: removeFromRelease
+        , readyForStaging: createReadyForStaging(serviceLocator)
+        , onStaging: createOnStaging(serviceLocator)
+        , readyForProduction: createReadyForProduction(serviceLocator)
+        , onProduction: createOnProduction(serviceLocator)
         }
     , checkTriggerPhrase = triggerPhraseChecker(serviceLocator)
     , action =

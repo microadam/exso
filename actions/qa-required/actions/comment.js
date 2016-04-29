@@ -1,10 +1,10 @@
 module.exports = createAction
 
-function createAction(serviceLocator) {
+function createAction (serviceLocator) {
 
   var action =
     { check: function (ghAction, comment, cb) {
-        var containsThumbsUp = comment.body.indexOf(':+1:') > -1
+        var containsThumbsUp = comment.body.indexOf('👍') > -1
           , authorIsNotQaer = comment.author !== comment.issueAuthor
 
         if (ghAction === 'created' && containsThumbsUp && authorIsNotQaer) {

@@ -2,7 +2,7 @@ module.exports = createAction
 
 var updateMasterMergeStatus = require('../lib/update-master-merge-status')
 
-function createAction() {
+function createAction () {
 
   var action =
     { check: function (ghAction, pr, cb) {

@@ -3,11 +3,12 @@ module.exports = createSemverLabeler
 var async = require('async')
   , parseFixesAndFeatures = require('./fixes-and-features-parser')
 
-function createSemverLabeler() {
+function createSemverLabeler () {
 
-  function applySemverLabel(releasePr, cb) {
+  function applySemverLabel (releasePr, cb) {
     var semver = determineSemver(releasePr.body)
       , currentSemverLabel = null
+      , tasks = []
 
     releasePr.labels.some(function (label) {
       if (label.indexOf('semver/') === 0) {
@@ -18,19 +19,15 @@ function createSemverLabeler() {
 
     if ('semver/' + semver === currentSemverLabel) return cb()
 
-    function removeSemverLabel(cb) {
-      var indexOfLabel = releasePr.labels.indexOf(currentSemverLabel)
-      releasePr.labels.splice(indexOfLabel, 1)
+    function removeSemverLabel (cb) {
       releasePr.removeLabel(currentSemverLabel, cb)
     }
 
-    function addNewSemverLabel(cb) {
+    function addNewSemverLabel (cb) {
       var label = 'semver/' + semver
-      releasePr.labels.push(label)
       releasePr.addLabels([ label ], cb)
     }
 
-    var tasks = []
     if (currentSemverLabel) {
       tasks.push(removeSemverLabel)
     }
@@ -41,7 +38,7 @@ function createSemverLabeler() {
     async.series(tasks, cb)
   }
 
-  function determineSemver(body) {
+  function determineSemver (body) {
     var data = parseFixesAndFeatures(body)
       , fixes = data.fixes
       , features = data.features

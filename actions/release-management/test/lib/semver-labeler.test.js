@@ -6,10 +6,10 @@ describe('semver labeler', function () {
   it('should not add or remove any labels if they are as they should be', function (done) {
     var addLabelsCalled = false
       , removeLabelCalled = false
-      , body = 'This release contains:\r\n\r\n'
-          + 'Fixes:\r\n\r\n'
-          + '- #20 `[FD #2012] Fix some strange issue`\r\n'
-          + '- #28 `[FD #2013] Fix some other issue`'
+      , body = 'This release contains:\r\n\r\n' +
+            'Fixes:\r\n\r\n' +
+            '- #20 `[FD #2012] Fix some strange issue`\r\n' +
+            '- #28 `[FD #2013] Fix some other issue`'
       , pr =
           { body: body
           , labels: [ 'semver/patch' ]
@@ -33,10 +33,10 @@ describe('semver labeler', function () {
   it('should label PR with "semver/patch" if only contains fixes', function (done) {
     var addLabelsCalled = false
       , removeLabelCalled = false
-      , body = 'This release contains:\r\n\r\n'
-          + 'Fixes:\r\n\r\n'
-          + '- #20 `[FD #2012] Fix some strange issue`\r\n'
-          + '- #28 `[FD #2013] Fix some other issue`'
+      , body = 'This release contains:\r\n\r\n' +
+          'Fixes:\r\n\r\n' +
+          '- #20 `[FD #2012] Fix some strange issue`\r\n' +
+          '- #28 `[FD #2013] Fix some other issue`'
       , pr =
           { body: body
           , labels: [ 'semver/major' ]
@@ -62,12 +62,12 @@ describe('semver labeler', function () {
   it('should label PR with "semver/minor" if more than 0 features are present', function (done) {
     var addLabelsCalled = false
       , removeLabelCalled = false
-      , body = 'This release contains:\r\n\r\n'
-          + 'Fixes:\r\n\r\n'
-          + '- #20 `[FD #2012] Fix some strange issue`\r\n'
-          + '- #28 `[FD #2013] Fix some other issue`\r\n\r\n'
-          + 'Features:\r\n\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`'
+      , body = 'This release contains:\r\n\r\n' +
+          'Fixes:\r\n\r\n' +
+          '- #20 `[FD #2012] Fix some strange issue`\r\n' +
+          '- #28 `[FD #2013] Fix some other issue`\r\n\r\n' +
+          'Features:\r\n\r\n' +
+          '- #26 `[PT #12432313] Implement my awesome feature`'
       , pr =
           { body: body
           , labels: [ 'semver/major' ]
@@ -93,20 +93,20 @@ describe('semver labeler', function () {
   it('should label PR with "semver/minor" if less than 10 features are present', function (done) {
     var addLabelsCalled = false
       , removeLabelCalled = false
-      , body = 'This release contains:\r\n\r\n'
-          + 'Fixes:\r\n\r\n'
-          + '- #20 `[FD #2012] Fix some strange issue`\r\n'
-          + '- #28 `[FD #2013] Fix some other issue`\r\n\r\n'
-          + 'Features:\r\n\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`'
+      , body = 'This release contains:\r\n\r\n' +
+            'Fixes:\r\n\r\n' +
+            '- #20 `[FD #2012] Fix some strange issue`\r\n' +
+            '- #28 `[FD #2013] Fix some other issue`\r\n\r\n' +
+            'Features:\r\n\r\n' +
+            '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+            '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+            '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+            '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+            '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+            '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+            '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+            '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+            '- #26 `[PT #12432313] Implement my awesome feature`'
       , pr =
           { body: body
           , labels: [ 'semver/major' ]
@@ -132,21 +132,21 @@ describe('semver labeler', function () {
   it('should label PR with "semver/major" if 10 features are present', function (done) {
     var addLabelsCalled = false
       , removeLabelCalled = false
-      , body = 'This release contains:\r\n\r\n'
-          + 'Fixes:\r\n\r\n'
-          + '- #20 `[FD #2012] Fix some strange issue`\r\n'
-          + '- #28 `[FD #2013] Fix some other issue`\r\n\r\n'
-          + 'Features:\r\n\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #27 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`'
+      , body = 'This release contains:\r\n\r\n' +
+          'Fixes:\r\n\r\n' +
+          '- #20 `[FD #2012] Fix some strange issue`\r\n' +
+          '- #28 `[FD #2013] Fix some other issue`\r\n\r\n' +
+          'Features:\r\n\r\n' +
+          '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+          '- #27 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`'
       , pr =
           { body: body
           , labels: [ 'semver/minor' ]
@@ -172,22 +172,22 @@ describe('semver labeler', function () {
   it('should label PR with "semver/major" if more than 10 features are present', function (done) {
     var addLabelsCalled = false
       , removeLabelCalled = false
-      , body = 'This release contains:\r\n\r\n'
-          + 'Fixes:\r\n\r\n'
-          + '- #20 `[FD #2012] Fix some strange issue`\r\n'
-          + '- #28 `[FD #2013] Fix some other issue`\r\n\r\n'
-          + 'Features:\r\n\r\n'
-          + '- #26 `[PT #12432313] Implement my awesome feature`\r\n'
-          + '- #27 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`\r\n'
-          + '- #23 `[PT #12432453] Implement my other awesome feature`'
+      , body = 'This release contains:\r\n\r\n' +
+          'Fixes:\r\n\r\n' +
+          '- #20 `[FD #2012] Fix some strange issue`\r\n' +
+          '- #28 `[FD #2013] Fix some other issue`\r\n\r\n' +
+          'Features:\r\n\r\n' +
+          '- #26 `[PT #12432313] Implement my awesome feature`\r\n' +
+          '- #27 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`\r\n' +
+          '- #23 `[PT #12432453] Implement my other awesome feature`'
       , pr =
           { body: body
           , labels: [ 'semver/minor' ]

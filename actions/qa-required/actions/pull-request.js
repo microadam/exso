@@ -1,6 +1,6 @@
 module.exports = createAction
 
-function createAction() {
+function createAction () {
 
   var action =
     { check: function (ghAction, pr, cb) {

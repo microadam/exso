@@ -2,7 +2,7 @@ module.exports = baseNotMaster
 
 var async = require('async')
 
-function baseNotMaster() {
+function baseNotMaster () {
 
   var prAction =
     { check: function (ghAction, pr, cb) {
@@ -20,9 +20,9 @@ function baseNotMaster() {
       }
     }
 
-  function addComment(pr, cb) {
-    var comment = '@' + pr.author + ' All PRs should be based off of `master`.'
-      + ' Please open a new PR with `master` as the base. Closing.'
+  function addComment (pr, cb) {
+    var comment = '@' + pr.author + ' All PRs should be based off of `master`.' +
+         ' Please open a new PR with `master` as the base. Closing.'
     pr.addComment(comment, cb)
   }
 

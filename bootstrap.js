@@ -7,7 +7,7 @@ var express = require('express')
   , gh = new GhApi({ version: '3.0.0' })
   , createRepoManager = require('./lib/repo-manager')
 
-function bootstrap(serviceLocator, actions, cb) {
+function bootstrap (serviceLocator, actions, cb) {
   var server = express()
     , repoManager = createRepoManager(serviceLocator)
     , webhookOptions =

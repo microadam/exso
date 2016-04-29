@@ -1,13 +1,14 @@
 module.exports = parseFixesAndFeatures
 
-function parseFixesAndFeatures(body) {
+function parseFixesAndFeatures (body) {
   var prefix = 'This release contains:\r\n\r\n'
+    , parts = null
+    , fixes = []
+    , features = []
 
   body = body.replace(prefix, '')
 
-  var parts = body.split('Features:')
-    , fixes = []
-    , features = []
+  parts = body.split('Features:')
 
   if (parts[0].indexOf('Fixes:') === 0) {
     fixes = parseFixes(parts[0])
@@ -23,14 +24,14 @@ function parseFixesAndFeatures(body) {
   return { fixes: fixes, features: features }
 }
 
-function parseFixes(fixes) {
+function parseFixes (fixes) {
   fixes = fixes.replace('Fixes:\r\n\r\n', '')
   fixes = fixes.split('\r\n')
   fixes = fixes.filter(function (f) { if (f) return f })
   return fixes
 }
 
-function parseFeatures(features) {
+function parseFeatures (features) {
   features = features.replace('\r\n\r\n', '')
   features = features.split('\r\n')
   return features

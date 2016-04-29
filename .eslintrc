@@ -1,0 +1,12 @@
+{
+  "extends": "clock",
+
+  "env": {
+    "es6": false
+  },
+
+  "rules": {
+    "no-path-concat": 0
+  }
+
+}

@@ -4,8 +4,8 @@ var assert = require('assert')
 
 describe('release-management release-creator', function () {
 
-  function runTest(name, cb) {
-    var expectedName = name ? name : 'random-random'
+  function runTest (name, cb) {
+    var expectedName = name || 'random-random'
       , createNewRelease = createReleaseCreator()
       , createBranchCalled = false
       , createPullCalled = false
@@ -19,8 +19,8 @@ describe('release-management release-creator', function () {
           , title: 'Title of PR'
           , addComment: function (comment, cb) {
               addCommentCalled = true
-              assert.equal(comment, '@microadam Release #12 `' + expectedName + '`'
-                + ' created with this PR successfully merged.')
+              assert.equal(comment, '@microadam Release #12 `' + expectedName + '`' +
+                ' created with this PR successfully merged.')
               cb()
             }
           }
@@ -36,7 +36,12 @@ describe('release-management release-creator', function () {
               assert.equal(title, 'Release: ' + expectedName)
               assert.equal(body, 'This release contains:\r\n\r\nFeatures:\r\n\r\n- #10 `Title of PR`')
               assert.equal(branchName, 'release/' + expectedName)
-              releasePr = { body: body, labels: [], number: 12, addLabels: function (l, cb) { cb() } }
+              releasePr =
+                { body: body
+                , labels: []
+                , number: 12
+                , addLabels: function (l, cb) { releasePr.labels = releasePr.labels.concat(l); cb() }
+                }
               cb(null, releasePr)
             }
           }

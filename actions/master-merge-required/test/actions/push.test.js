@@ -27,21 +27,25 @@ describe('master-merge-required push action', function () {
   it('should run "updateMasterMergeStatus" for each open PR', function (done) {
 
     var updateMasterMergeStatusCallCount = 0
-    function mockUpdateMasterMergeStatus(pr, cb) {
+      , reset = null
+      , sl = null
+      , action = null
+
+    function mockUpdateMasterMergeStatus (pr, cb) {
       updateMasterMergeStatusCallCount++
       cb()
     }
 
-    var reset = createAction.__set__('updateMasterMergeStatus', mockUpdateMasterMergeStatus)
-      , sl =
-          { repoManager: function () {
-              function getOpenPulls(cb) {
-                cb(null, [ {}, {} ])
-              }
-              return { getOpenPulls: getOpenPulls }
+    reset = createAction.__set__('updateMasterMergeStatus', mockUpdateMasterMergeStatus)
+    sl =
+        { repoManager: function () {
+            function getOpenPulls (cb) {
+              cb(null, [ {}, {} ])
             }
+            return { getOpenPulls: getOpenPulls }
           }
-      , action = createAction(sl)
+        }
+    action = createAction(sl)
 
     action.exec({}, function (error) {
       if (error) return done(error)

@@ -89,8 +89,8 @@ describe('update-master-merge-status', function () {
     })
   })
 
-  it('should add the need-merge label and a comment if PR is '
-    + 'not mergeable and it does not have the need-merge label', function (done) {
+  it('should add the need-merge label and a comment if PR is ' +
+      'not mergeable and it does not have the need-merge label', function (done) {
 
     var removeLabelCalled = false
       , addCommentCalled = false

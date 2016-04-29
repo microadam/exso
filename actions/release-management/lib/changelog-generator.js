@@ -2,46 +2,41 @@ module.exports = createChangelogGenerator
 
 var parseFixesAndFeatures = require('./fixes-and-features-parser')
 
-function createChangelogGenerator() {
+function createChangelogGenerator (serviceLocator) {
 
-  function generateChangelog(currentBody, prToAdd) {
-    var prefix = 'This release contains:\r\n\r\n'
-      , data = parseFixesAndFeatures(currentBody)
-      , fixes = data.fixes
-      , features = data.features
-      , lineToAdd = '- #' + prToAdd.number + ' `' + prToAdd.title + '`'
+  function generateAndCommitChangelog (pr, version, cb) {
+    var changeLog = buildChangelog(pr.body, version)
+      , repoManager = serviceLocator.repoManager(pr.owner, pr.repo)
+      , path = 'changelog.md'
+      , commitMessage = 'Update Changelog'
 
-    if (fixes.indexOf(lineToAdd) === -1 && features.indexOf(lineToAdd) === -1) {
-      if (prToAdd.branch.indexOf('bug/') === 0) {
-        fixes.push(lineToAdd)
-      } else if (prToAdd.branch.indexOf('feature/') === 0) {
-        features.push(lineToAdd)
+    repoManager.getFileContents(path, pr.branch, function (error, currentChangelog, blobSha) {
+      if (error && error.code === 404) {
+        return repoManager.createFile(path, changeLog, commitMessage, pr.branch, cb)
+      } else if (error) {
+        return cb(error)
       }
-    }
-
-    return buildChangelog(prefix, fixes, features)
+      changeLog = changeLog + currentChangelog
+      repoManager.updateFile(path, changeLog, commitMessage, pr.branch, blobSha, cb)
+    })
   }
 
-  function buildChangelog(prefix, fixes, features) {
-    var changelog = prefix
+  function buildChangelog (body, version) {
+    var now = new Date()
+      , changelog = version + ' / ' + now.toString() + '\n====================================\n'
+      , data = parseFixesAndFeatures(body)
 
-    if (fixes.length) {
-      changelog += 'Fixes:\r\n\r\n'
-      changelog += fixes.join('\r\n')
-    }
+    data = data.fixes.concat(data.features)
 
-    if (fixes.length && features.length) {
-      changelog += '\r\n\r\n'
-    }
+    data.forEach(function (item) {
+      var parts = item.split('`')
+      changelog = changelog + '- ' + parts[1] + '\n'
+    })
 
-    if (features.length) {
-      changelog += 'Features:\r\n\r\n'
-      changelog += features.join('\r\n')
-    }
+    changelog = changelog + '\n'
 
     return changelog
   }
 
-  return generateChangelog
-
+  return generateAndCommitChangelog
 }

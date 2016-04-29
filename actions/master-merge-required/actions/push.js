@@ -3,7 +3,7 @@ module.exports = createAction
 var async = require('async')
   , updateMasterMergeStatus = require('../lib/update-master-merge-status')
 
-function createAction(serviceLocator) {
+function createAction (serviceLocator) {
 
   var action =
     { check: function (ghAction, branch, cb) {

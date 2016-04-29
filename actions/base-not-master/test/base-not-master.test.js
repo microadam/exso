@@ -52,8 +52,8 @@ describe('base-not-master', function () {
             }
           , addComment: function (comment, cb) {
               addCommentCalled = true
-              var expectedComment = '@dave All PRs should be based off of `master`. '
-                + 'Please open a new PR with `master` as the base. Closing.'
+              var expectedComment = '@dave All PRs should be based off of `master`. ' +
+                    'Please open a new PR with `master` as the base. Closing.'
               assert.equal(comment, expectedComment)
               cb()
             }
