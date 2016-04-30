@@ -17,6 +17,7 @@ describe('Repo Manager', function () {
   beforeEach(function () {
     serviceLocator = createServiceLocator()
     serviceLocator.register('secrets', { webhookSecret: 'test', githubToken: 'test' })
+    serviceLocator.register('config', { url: 'http://my.site' })
     serviceLocator.register('logger', logger)
   })
 
@@ -458,6 +459,161 @@ describe('Repo Manager', function () {
       nock('https://api.github.com')
         .patch('/repos/microadam/exso-test/git/refs/heads%2Ffeature%2Ftest?access_token=' + token
         , { sha: 'ghi789' })
+        .reply(200)
+
+      runTest(action, done)
+    })
+
+  })
+
+  describe('#createInitialHook', function () {
+
+    it('should create the initial hook', function (done) {
+      var action =
+            { name: 'test'
+            , actions:
+              { push:
+                { check: function (ghAction, branch, cb) {
+                    cb(null, true)
+                  }
+                , exec: function (branch) {
+                    var repoManager = serviceLocator.repoManager(branch.owner, branch.repo)
+                    repoManager.createInitialHook(done)
+                  }
+                }
+              }
+            }
+        , token = serviceLocator.secrets.githubToken
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/hooks?access_token=' + token
+          , { config:
+              { url: 'http://my.site/github/webhook'
+              , 'content_type': 'json'
+              , secret: 'test'
+              }
+            , events:
+              [ 'push', 'pull_request', 'issue_comment', 'create'
+              , 'pull_request_review_comment', 'commit_comment'
+              ]
+            , active: true
+            , name: 'web'
+            })
+        .reply(200)
+
+      runTest(action, done)
+    })
+
+  })
+
+  describe('#clearAllLabels', function () {
+
+    it('should clear all the labels', function (done) {
+      var action =
+            { name: 'test'
+            , actions:
+              { push:
+                { check: function (ghAction, branch, cb) {
+                    cb(null, true)
+                  }
+                , exec: function (branch) {
+                    var repoManager = serviceLocator.repoManager(branch.owner, branch.repo)
+                    repoManager.clearAllLabels(done)
+                  }
+                }
+              }
+            }
+        , token = serviceLocator.secrets.githubToken
+
+      nock('https://api.github.com')
+        .get('/repos/microadam/exso-test/labels?access_token=' + token)
+        .reply(200, [ { name: 'test' }, { name: 'test-two' } ])
+
+      nock('https://api.github.com')
+        .delete('/repos/microadam/exso-test/labels/test?access_token=' + token)
+        .reply(200)
+
+      nock('https://api.github.com')
+        .delete('/repos/microadam/exso-test/labels/test-two?access_token=' + token)
+        .reply(200)
+
+      runTest(action, done)
+    })
+
+  })
+
+  describe('#createRequiredLabels', function () {
+
+    it('should create all required labels', function (done) {
+      var action =
+            { name: 'test'
+            , actions:
+              { push:
+                { check: function (ghAction, branch, cb) {
+                    cb(null, true)
+                  }
+                , exec: function (branch) {
+                    var repoManager = serviceLocator.repoManager(branch.owner, branch.repo)
+                    repoManager.createRequiredLabels(done)
+                  }
+                }
+              }
+            }
+        , token = serviceLocator.secrets.githubToken
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'needs-master-merge', color: 'b60205' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'qa-required', color: '1d76db' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'release', color: 'd4c5f9' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'ready-for-staging', color: 'fef2c0' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'on-staging', color: 'fbca04' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'on-staging--partial', color: 'd93f0b' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'ready-for-production', color: 'c2e0c6' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'on-production', color: '0e8a16' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'semver/major', color: 'c5def5' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'semver/minor', color: 'c5def5' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'semver/patch', color: 'c5def5' })
         .reply(200)
 
       runTest(action, done)
