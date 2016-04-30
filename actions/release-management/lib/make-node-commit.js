@@ -32,7 +32,7 @@ function createNodeCommiter (serviceLocator) {
     if (contents && Array.isArray(contents)) contents = contents[0]
     if (contents) {
       contents = JSON.parse(contents)
-      contents.version = version
+      contents.version = version.replace('v', '')
       contents = JSON.stringify(contents, null, 2) + '\n'
     }
     return contents

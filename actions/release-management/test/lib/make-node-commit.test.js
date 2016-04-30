@@ -14,10 +14,10 @@ describe('release-management node file commiter', function () {
       var expected =
         { files:
           [ { path: 'package.json'
-            , content: '{\n  "version": "v2.0.0"\n}\n'
+            , content: '{\n  "version": "2.0.0"\n}\n'
             }
           , { path: 'npm-shrinkwrap.json'
-            , content: '{\n  "version": "v2.0.0"\n}\n'
+            , content: '{\n  "version": "2.0.0"\n}\n'
             }
           ]
         , commitMessage: 'v2.0.0'
@@ -60,7 +60,7 @@ describe('release-management node file commiter', function () {
       var expected =
         { files:
           [ { path: 'package.json'
-            , content: '{\n  "version": "v2.0.0"\n}\n'
+            , content: '{\n  "version": "2.0.0"\n}\n'
             }
           ]
         , commitMessage: 'v2.0.0'
