@@ -621,4 +621,50 @@ describe('Repo Manager', function () {
 
   })
 
+  describe('#cleanupBranches', function () {
+
+    it('should delete all branches that are merged into master', function (done) {
+      var action =
+            { name: 'test'
+            , actions:
+              { push:
+                { check: function (ghAction, branch, cb) {
+                    cb(null, true)
+                  }
+                , exec: function (branch) {
+                    var repoManager = serviceLocator.repoManager(branch.owner, branch.repo)
+                    repoManager.cleanupBranches(done)
+                  }
+                }
+              }
+            }
+        , token = serviceLocator.secrets.githubToken
+
+      nock('https://api.github.com')
+        .get('/repos/microadam/exso-test/git/refs?per_page=100&access_token=' + token)
+        .reply(200,
+          [ { ref: 'refs/heads/master', object: { sha: 'abc123' } }
+          , { ref: 'refs/heads/test', object: { sha: 'def456' } }
+          , { ref: 'refs/heads/feature/a', object: { sha: 'ghi789' } }
+          , { ref: 'refs/tags/1.0.0' }
+          , { ref: 'refs/pull/54' }
+          ])
+
+      nock('https://api.github.com')
+        .get('/repos/microadam/exso-test/compare/abc123...def456?access_token=' + token)
+        .reply(200, { 'ahead_by': 1 })
+
+      nock('https://api.github.com')
+        .get('/repos/microadam/exso-test/compare/abc123...ghi789?access_token=' + token)
+        .reply(200, { 'ahead_by': 0 })
+
+      nock('https://api.github.com')
+        .delete('/repos/microadam/exso-test/git/refs/heads%2Ffeature%2Fa?access_token=' + token)
+        .reply(200)
+
+      runTest(action, done)
+    })
+
+  })
+
 })
