@@ -158,6 +158,31 @@ describe('pull request', function () {
     })
   })
 
+  it('should be able to set an assignee on a PR', function (done) {
+    var action =
+          { name: 'test'
+          , actions:
+            { 'pull_request':
+              { check: function (ghAction, pr, cb) {
+                  cb(null, true)
+                }
+              , exec: function (pr) {
+                  pr.setAssignee('dave', done)
+                }
+              }
+            }
+          }
+
+    nock('https://api.github.com')
+      .patch('/repos/microadam/exso-test/issues/11?access_token=' + serviceLocator.secrets.githubToken
+      , { assignee: 'dave' })
+      .reply(200)
+
+    runTest(action, function (error) {
+      if (error) return done(error)
+    })
+  })
+
   it('should be able to add labels to a PR', function (done) {
     var action =
           { name: 'test'

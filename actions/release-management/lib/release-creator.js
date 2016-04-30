@@ -17,9 +17,12 @@ function createReleaseCreator () {
 
       repoManager.createPull(title, body, branchName, function (error, releasePr) {
         if (error) return cb(error)
-        var commentToAdd = '@' + comment.author + ' Release #' + releasePr.number + ' `' +
-              releaseName + '` created with this PR successfully merged.'
-        addSemverLabelAndComment(pr, releasePr, commentToAdd, cb)
+        releasePr.setAssignee(comment.author, function (error) {
+          if (error) return cb(error)
+          var commentToAdd = '@' + comment.author + ' Release #' + releasePr.number + ' `' +
+          releaseName + '` created with this PR successfully merged.'
+          addSemverLabelAndComment(pr, releasePr, commentToAdd, cb)
+        })
       })
     })
   }

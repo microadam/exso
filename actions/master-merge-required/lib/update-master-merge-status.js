@@ -6,6 +6,7 @@ function updateMasterMergeStatus (pr, cb) {
     var label = 'needs-master-merge'
       , hasNeedMergeLabel = pr.labels.indexOf(label) > -1
       , comment = null
+      , author = null
 
     if (hasNeedMergeLabel && mergeable) {
       pr.removeLabel(label, function (error) {
@@ -13,7 +14,8 @@ function updateMasterMergeStatus (pr, cb) {
         addStatus(true, cb)
       })
     } else if (!hasNeedMergeLabel && !mergeable) {
-      comment = '@' + pr.author + ' PR needs to have `master` merged in'
+      author = pr.assignee ? pr.assignee : pr.author
+      comment = '@' + author + ' PR needs to have `master` merged in'
       pr.addComment(comment, function (error) {
         if (error) return cb(error)
         pr.addLabels([ label ], function (error) {

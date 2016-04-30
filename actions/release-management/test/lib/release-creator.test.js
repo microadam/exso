@@ -10,6 +10,7 @@ describe('release-management release-creator', function () {
       , createBranchCalled = false
       , createPullCalled = false
       , addCommentCalled = false
+      , setAssigneeCalled = false
       , releasePr = null
       , pr =
           { body: ''
@@ -41,6 +42,11 @@ describe('release-management release-creator', function () {
                 , labels: []
                 , number: 12
                 , addLabels: function (l, cb) { releasePr.labels = releasePr.labels.concat(l); cb() }
+                , setAssignee: function (assignee, cb) {
+                    setAssigneeCalled = true
+                    assert.equal(assignee, 'microadam')
+                    cb()
+                  }
                 }
               cb(null, releasePr)
             }
@@ -50,6 +56,7 @@ describe('release-management release-creator', function () {
       assert.equal(createBranchCalled, true, 'createBranch was not called')
       assert.equal(createPullCalled, true, 'createPull was not called')
       assert.equal(addCommentCalled, true, 'addComment was not called')
+      assert.equal(setAssigneeCalled, true, 'setAssignee was not called')
       assert.deepEqual(releasePr.labels, [ 'semver/minor' ])
       cb()
     })
