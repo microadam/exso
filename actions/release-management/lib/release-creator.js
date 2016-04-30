@@ -19,7 +19,7 @@ function createReleaseCreator () {
         if (error) return cb(error)
         releasePr.setAssignee(comment.author, function (error) {
           if (error) return cb(error)
-          var commentToAdd = '@' + comment.author + ' Release #' + releasePr.number + ' `' +
+          var commentToAdd = 'Release #' + releasePr.number + ' `' +
           releaseName + '` created with this PR successfully merged.'
           addSemverLabelAndComment(pr, releasePr, commentToAdd, cb)
         })

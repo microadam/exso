@@ -20,7 +20,7 @@ function createExistingReleaseAdder (serviceLocator) {
           var changelog = generateDescription(releasePr.body, pr)
           releasePr.updateDescription(changelog, function (error) {
             if (error) return cb(error)
-            var commentToAdd = '@' + comment.author + ' This PR has been successfully' +
+            var commentToAdd = 'This PR has been successfully' +
                 ' merged into Release #' + releasePr.number + '.'
             addLabelsAndComment(pr, releasePr, commentToAdd, cb)
           })

@@ -37,7 +37,7 @@ function createOnStaging (serviceLocator) {
 
       async.parallel(tasks, function (error) {
         if (error) return cb(error)
-        var commentToAdd = '@' + comment.author + ' Successfully marked as on staging'
+        var commentToAdd = 'Successfully marked as on staging'
         pr.addComment(commentToAdd, cb)
       })
     })

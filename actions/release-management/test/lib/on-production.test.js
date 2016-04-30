@@ -134,7 +134,7 @@ describe('release-management on production', function () {
             }
           , addComment: function (c, cb) {
               addCommentCalled = true
-              assert.equal(c, '@dave Successfully marked as on production')
+              assert.equal(c, 'Successfully marked as on production')
               cb()
             }
           }

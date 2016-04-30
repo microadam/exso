@@ -20,7 +20,7 @@ describe('release-management release-creator', function () {
           , title: 'Title of PR'
           , addComment: function (comment, cb) {
               addCommentCalled = true
-              assert.equal(comment, '@microadam Release #12 `' + expectedName + '`' +
+              assert.equal(comment, 'Release #12 `' + expectedName + '`' +
                 ' created with this PR successfully merged.')
               cb()
             }

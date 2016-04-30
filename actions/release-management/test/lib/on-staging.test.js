@@ -258,7 +258,7 @@ describe('release-management on staging', function () {
             }
           , addComment: function (c, cb) {
               addCommentCalled = true
-              assert.equal(c, '@dave Successfully marked as on staging')
+              assert.equal(c, 'Successfully marked as on staging')
               cb()
             }
           }
