@@ -5,7 +5,8 @@ var serviceLocator = require('service-locator')()
       { webhookSecret: process.env.WEBHOOK_SECRET
       , githubToken: process.env.GITHUB_TOKEN
       }
-  , url = process.env.URL
+  , url = process.env.URL || 'http://localhost'
+  , port = process.env.PORT || 3000
   , loadActions = require('./lib/action-loader')
   , bootstrap = require('./bootstrap')
   , createHealthRoute = require('./routes/health')
@@ -26,8 +27,8 @@ loadActions(serviceLocator, function (error, actions) {
     serviceLocator.ghApi.users.get({}, function (error, user) {
       if (error) throw error
       serviceLocator.register('authedUser', { username: user.login })
-      serviceLocator.server.listen(3000, function () {
-        serviceLocator.logger.info('Started: http://localhost:3000')
+      serviceLocator.server.listen(port, function () {
+        serviceLocator.logger.info('Started: ' + url + ':' + port)
       })
     })
   })
