@@ -2,8 +2,8 @@ var serviceLocator = require('service-locator')()
   , bunyan = require('bunyan')
   , logger = bunyan.createLogger({ name: 'exso' })
   , secrets =
-      { webhookSecret: process.env.WEBHOOK_SECRET || 'adamjd1'
-      , githubToken: process.env.GITHUB_TOKEN || 'b57d23b0c9e626c6f638efd95d117b24b5cb09c0'
+      { webhookSecret: process.env.WEBHOOK_SECRET
+      , githubToken: process.env.GITHUB_TOKEN
       }
   , url = process.env.URL || 'http://399d3f5c.ngrok.io'
   , port = process.env.PORT || 3000
