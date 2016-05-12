@@ -256,6 +256,34 @@ describe('Repo Manager', function () {
 
   })
 
+  describe('#getCommit', function () {
+
+    it('should retrieve commit', function (done) {
+      var action =
+            { name: 'test'
+            , actions:
+              { push:
+                { check: function (ghAction, branch, cb) {
+                    cb(null, true)
+                  }
+                , exec: function (branch) {
+                    var repoManager = serviceLocator.repoManager(branch.owner, branch.repo)
+                    repoManager.getCommit('abc123', done)
+                  }
+                }
+              }
+            }
+        , token = serviceLocator.secrets.githubToken
+
+      nock('https://api.github.com')
+        .get('/repos/microadam/exso-test/git/commits/abc123?access_token=' + token)
+        .reply(200)
+
+      runTest(action, done)
+    })
+
+  })
+
   describe('#createTag', function () {
 
     it('should create a Tag', function (done) {

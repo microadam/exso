@@ -1,18 +1,24 @@
 var assert = require('assert')
-  , updateMasterMergeStatus = require('../../lib/update-master-merge-status')
+  , rewire = require('rewire')
+  , updateMasterMergeStatus = rewire('../../lib/update-master-merge-status')
 
 describe('update-master-merge-status', function () {
 
-  it('should update status if PR is mergeable and it does not have the need-merge label', function (done) {
+  var reset = null
+
+  afterEach(function () {
+    reset()
+  })
+
+  it('should update status to success if PR did not need ' +
+  'merging and it does not have the need-merge label', function (done) {
     var removeLabelCalled = false
       , addCommentCalled = false
       , addLabelsCalled = false
       , addStatusCalled = false
       , pr =
-          { labels: []
-          , isMergeable: function (cb) {
-              cb(null, true)
-            }
+          { headSha: 'abc123'
+          , labels: []
           , removeLabel: function (label, cb) {
               removeLabelCalled = true
               cb()
@@ -36,6 +42,14 @@ describe('update-master-merge-status', function () {
               cb()
             }
           }
+      , mockBranch =
+          function () {
+            this.merge = function (branch, cb) {
+              cb()
+            }
+          }
+
+    reset = updateMasterMergeStatus.__set__('Branch', mockBranch)
 
     updateMasterMergeStatus(pr, function () {
       assert.equal(removeLabelCalled, false, 'label should not have been removed')
@@ -46,16 +60,14 @@ describe('update-master-merge-status', function () {
     })
   })
 
-  it('should update status if PR is not mergeable and it has the need-merge label', function (done) {
+  it('should update status to failure if PR is not mergeable and it has the need-merge label', function (done) {
     var removeLabelCalled = false
       , addCommentCalled = false
       , addLabelsCalled = false
       , addStatusCalled = false
       , pr =
-          { labels: [ 'needs-master-merge' ]
-          , isMergeable: function (cb) {
-              cb(null, false)
-            }
+          { headSha: 'abc123'
+          , labels: [ 'needs-master-merge' ]
           , removeLabel: function (label, cb) {
               removeLabelCalled = true
               cb()
@@ -79,6 +91,14 @@ describe('update-master-merge-status', function () {
               cb()
             }
           }
+      , mockBranch =
+          function () {
+            this.merge = function (branch, cb) {
+              cb({ code: 409 })
+            }
+          }
+
+    reset = updateMasterMergeStatus.__set__('Branch', mockBranch)
 
     updateMasterMergeStatus(pr, function () {
       assert.equal(removeLabelCalled, false, 'label should not have been removed')
@@ -99,9 +119,6 @@ describe('update-master-merge-status', function () {
       , pr =
           { author: 'dave'
           , labels: []
-          , isMergeable: function (cb) {
-              cb(null, false)
-            }
           , removeLabel: function (label, cb) {
               removeLabelCalled = true
               cb()
@@ -127,6 +144,14 @@ describe('update-master-merge-status', function () {
               cb()
             }
           }
+      , mockBranch =
+          function () {
+            this.merge = function (branch, cb) {
+              cb({ code: 409 })
+            }
+          }
+
+    reset = updateMasterMergeStatus.__set__('Branch', mockBranch)
 
     updateMasterMergeStatus(pr, function () {
       assert.equal(removeLabelCalled, false, 'label should not have been removed')
@@ -148,9 +173,6 @@ describe('update-master-merge-status', function () {
           { author: 'dave'
           , assignee: 'fred'
           , labels: []
-          , isMergeable: function (cb) {
-              cb(null, false)
-            }
           , removeLabel: function (label, cb) {
               removeLabelCalled = true
               cb()
@@ -176,6 +198,14 @@ describe('update-master-merge-status', function () {
               cb()
             }
           }
+      , mockBranch =
+          function () {
+            this.merge = function (branch, cb) {
+              cb({ code: 409 })
+            }
+          }
+
+    reset = updateMasterMergeStatus.__set__('Branch', mockBranch)
 
     updateMasterMergeStatus(pr, function () {
       assert.equal(removeLabelCalled, false, 'label should not have been removed')
@@ -192,10 +222,8 @@ describe('update-master-merge-status', function () {
       , addLabelsCalled = false
       , addStatusCalled = false
       , pr =
-          { labels: [ 'needs-master-merge' ]
-          , isMergeable: function (cb) {
-              cb(null, true)
-            }
+          { headSha: 'abc123'
+          , labels: [ 'needs-master-merge' ]
           , removeLabel: function (label, cb) {
               removeLabelCalled = true
               assert.equal(label, 'needs-master-merge')
@@ -220,10 +248,69 @@ describe('update-master-merge-status', function () {
               cb()
             }
           }
+      , mockBranch =
+          function () {
+            this.merge = function (branch, cb) {
+              cb()
+            }
+          }
+
+    reset = updateMasterMergeStatus.__set__('Branch', mockBranch)
 
     updateMasterMergeStatus(pr, function () {
       assert.equal(removeLabelCalled, true, 'label should have been removed')
       assert.equal(addCommentCalled, false, 'comment should not have been added')
+      assert.equal(addLabelsCalled, false, 'label should not have been added')
+      assert.equal(addStatusCalled, true, 'status should have been added')
+      done()
+    })
+  })
+
+  it('should update status to success and add a comment that master has been merged', function (done) {
+    var removeLabelCalled = false
+      , addCommentCalled = false
+      , addLabelsCalled = false
+      , addStatusCalled = false
+      , pr =
+          { author: 'dave'
+          , headSha: 'abc123'
+          , labels: []
+          , removeLabel: function (label, cb) {
+              removeLabelCalled = true
+              cb()
+            }
+          , addComment: function (comment, cb) {
+              addCommentCalled = true
+              assert.equal(comment, '@dave this PR has automatically had `master` merged in')
+              cb()
+            }
+          , addLabels: function (labels, cb) {
+              addLabelsCalled = true
+              cb()
+            }
+          , addStatus: function (options, cb) {
+              addStatusCalled = true
+              assert.deepEqual(options
+              , { context: 'Outdated Check'
+                , description: 'is master merge required?'
+                , state: 'success'
+                }
+              )
+              cb()
+            }
+          }
+      , mockBranch =
+          function () {
+            this.merge = function (branch, cb) {
+              cb(null, true)
+            }
+          }
+
+    reset = updateMasterMergeStatus.__set__('Branch', mockBranch)
+
+    updateMasterMergeStatus(pr, function () {
+      assert.equal(removeLabelCalled, false, 'label should not have been removed')
+      assert.equal(addCommentCalled, true, 'comment should have been added')
       assert.equal(addLabelsCalled, false, 'label should not have been added')
       assert.equal(addStatusCalled, true, 'status should have been added')
       done()

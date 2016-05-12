@@ -1,18 +1,30 @@
 var assert = require('assert')
-  , action = require('../../actions/pull-request')()
+  , createAction = require('../../actions/pull-request')
 
 describe('master-merge-required pull request action', function () {
 
+  var sl =
+        { authedUser: { username: 'test' }
+        , repoManager: function () {
+           var repoManager =
+                { getCommit: function (sha, cb) {
+                    cb(null, { author: { name: 'dave' } })
+                  }
+                }
+            return repoManager
+          }
+        }
+
   it('should pass check when github action is "opened"', function (done) {
-    action.check('opened', {}, function (error, shouldExec) {
+    createAction(sl).check('opened', {}, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
       done()
     })
   })
 
-  it('should pass check when github action is "synchronize"', function (done) {
-    action.check('synchronize', {}, function (error, shouldExec) {
+  it('should pass check when github action is "synchronize" and commit not by bot', function (done) {
+    createAction(sl).check('synchronize', {}, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
       done()
@@ -20,7 +32,26 @@ describe('master-merge-required pull request action', function () {
   })
 
   it('should not pass check when github action is not "opened" or "synchronize"', function (done) {
-    action.check('closed', {}, function (error, shouldExec) {
+    createAction(sl).check('closed', {}, function (error, shouldExec) {
+      if (error) return done(error)
+      assert.equal(shouldExec, false, 'shouldExec should be false')
+      done()
+    })
+  })
+
+  it('should not pass check when github action is "synchronize" and commit is by bot', function (done) {
+    var sl =
+          { authedUser: { username: 'bot' }
+          , repoManager: function () {
+             var repoManager =
+                  { getCommit: function (sha, cb) {
+                      cb(null, { author: { name: 'bot' } })
+                    }
+                  }
+              return repoManager
+            }
+          }
+    createAction(sl).check('synchronize', {}, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
       done()
@@ -28,7 +59,7 @@ describe('master-merge-required pull request action', function () {
   })
 
   it('should have an exec function', function () {
-    assert.equal(typeof action.exec, 'function')
+    assert.equal(typeof createAction().exec, 'function')
   })
 
 })
