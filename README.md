@@ -54,6 +54,8 @@ TBC
 
 ### Release PRs
 
+#### Ready for Staging
+
 Once a Release PR contains all of the required Feature PRs, it can be made ready for staging:
 
 ```
@@ -61,6 +63,8 @@ Once a Release PR contains all of the required Feature PRs, it can be made ready
 ```
 
 This will create a pre-release tag (e.g `v1.0.0-0`) for you. Once complete, a reply will be posted containing the tag to use in deployment.
+
+#### On Staging
 
 Once a tag has been successfully deployed to staging, comment on the Release PR with:
 
@@ -70,6 +74,8 @@ Once a tag has been successfully deployed to staging, comment on the Release PR 
 
 This will update the Release PR and all of the Feature PRs within it to label them as "on-staging".
 
+#### Ready for Production
+
 When you would like the Release PR to go to production, just add a comment like:
 
 ```
@@ -77,6 +83,8 @@ When you would like the Release PR to go to production, just add a comment like:
 ```
 
 This will generate and commit a changelog of all of the changes in the Release PR and provide you with a release tag (e.g `v1.0.0`) for you to deploy to production.
+
+#### On Production
 
 Once deployed to production comment on the Release PR with:
 
