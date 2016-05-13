@@ -1,6 +1,8 @@
 # exso
 
-Exsolvo - "to release"
+Exsolvo - "to release".
+
+An opinionated GitHub bot that aids you and your team in managing releases.
 
 ## Usage
 
