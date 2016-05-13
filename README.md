@@ -16,7 +16,7 @@ Add a comment to a PR which contains a 👍 to have the "QA Required" status set
 
 Please note, you cannot thumb up your own PR and any subsequent changes to the PR will revert the status to pending and require another thumbs up.
 
-### Add to a Release Branch
+#### Add to a Release Branch
 
 To create a new release branch, you have a couple of options:
 
@@ -47,6 +47,10 @@ If conflicts were encountered when attempting to automatically merge a Feature P
 ```
 
 This will mark the merge as successful and update the Release PR accordingly.
+
+#### Remove from a Release Branch
+
+TBC
 
 ### Release PRs
 
