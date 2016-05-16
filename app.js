@@ -5,7 +5,7 @@ var serviceLocator = require('service-locator')()
       { webhookSecret: process.env.WEBHOOK_SECRET
       , githubToken: process.env.GITHUB_TOKEN
       }
-  , url = process.env.URL || 'http://399d3f5c.ngrok.io'
+  , url = process.env.URL
   , port = process.env.PORT || 3000
   , loadActions = require('./lib/action-loader')
   , bootstrap = require('./bootstrap')
