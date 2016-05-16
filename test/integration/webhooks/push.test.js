@@ -60,7 +60,7 @@ describe('push', function () {
     runTest(serviceLocator, action, done)
   })
 
-  it('should execute a branch merge', function (done) {
+  it('should execute a branch merge where no merge occurs', function (done) {
 
     var action =
           { name: 'test'
@@ -71,7 +71,11 @@ describe('push', function () {
                 }
               , exec: function (branch) {
                   assert.equal(branch instanceof Branch, true, 'is not a branch')
-                  branch.merge('feature/test', done)
+                  branch.merge('feature/test', function (error, sha) {
+                    assert.equal(error, null)
+                    assert.equal(sha, null)
+                    done()
+                  })
                 }
               }
             }
@@ -83,6 +87,37 @@ describe('push', function () {
         , head: 'feature/test'
         })
       .reply(200)
+
+    runTest(serviceLocator, action, done)
+  })
+
+  it('should execute a branch merge which is successful', function (done) {
+
+    var action =
+          { name: 'test'
+          , actions:
+            { push:
+              { check: function (ghAction, branch, cb) {
+                  cb(null, true)
+                }
+              , exec: function (branch) {
+                  assert.equal(branch instanceof Branch, true, 'is not a branch')
+                  branch.merge('feature/test', function (error, sha) {
+                    assert.equal(error, null)
+                    assert.equal(sha, 'abc123')
+                    done()
+                  })
+                }
+              }
+            }
+          }
+
+    nock('https://api.github.com')
+      .post('/repos/microadam/exso-test/merges?access_token=' + serviceLocator.secrets.githubToken
+      , { base: 'master'
+        , head: 'feature/test'
+        })
+      .reply(200, { sha: 'abc123' })
 
     runTest(serviceLocator, action, done)
   })
