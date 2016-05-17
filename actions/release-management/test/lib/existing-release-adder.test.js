@@ -48,13 +48,13 @@ describe('release-management existing-release-adder', function () {
               releasePr =
                 { branch: 'release/test'
                 , number: 11
-                , body: 'This release contains:\r\n\r\nFixes:\r\n\r\n- #20 `My Title`'
+                , body: 'This release contains:\r\n\r\nFixes:\r\n\r\n- #21 `Test`'
                 , labels: []
                 , addLabels: function (l, cb) { releasePr.labels = releasePr.labels.concat(l); cb() }
                 , removeLabel: function (l, cb) { releasePr.labels.splice(releasePr.labels.indexOf(l), 1); cb() }
                 , updateDescription: function (desc, cb) {
                     updateDescriptionCalled = true
-                    assert.equal(desc, 'This release contains:\r\n\r\nFixes:\r\n\r\n- #20 `My Title`')
+                    assert.equal(desc, 'This release contains:\r\n\r\nFixes:\r\n\r\n- #21 `Test`\r\n- #20 `My Title`')
                     cb()
                   }
                 }
@@ -83,6 +83,7 @@ describe('release-management existing-release-adder', function () {
 
     addToExistingRelease(11, pr, { author: 'microadam' }, repoManager, function (error) {
       if (error) return done(error)
+      assert.equal(releasePr.body, 'This release contains:\r\n\r\nFixes:\r\n\r\n- #21 `Test`\r\n- #20 `My Title`')
       assert.equal(addCommentCalled, true, 'comment was not added')
       assert.equal(updateDescriptionCalled, true, 'description was not updated')
       assert.deepEqual(releasePr.labels, [ 'semver/patch' ])

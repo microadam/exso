@@ -18,6 +18,7 @@ function createExistingReleaseAdder (serviceLocator) {
           if (error || !success) return cb(error)
 
           var changelog = generateDescription(releasePr.body, pr)
+          releasePr.body = changelog
           releasePr.updateDescription(changelog, function (error) {
             if (error) return cb(error)
             var commentToAdd = 'This PR has been successfully' +
