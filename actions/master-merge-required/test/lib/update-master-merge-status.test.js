@@ -125,7 +125,7 @@ describe('update-master-merge-status', function () {
             }
           , addComment: function (comment, cb) {
               addCommentCalled = true
-              assert.equal(comment, '@dave PR needs to have `master` merged in')
+              assert.equal(comment, '@dave PR needs to have `master` merged in. Automatic merge failed.')
               cb()
             }
           , addLabels: function (labels, cb) {
@@ -179,7 +179,7 @@ describe('update-master-merge-status', function () {
             }
           , addComment: function (comment, cb) {
               addCommentCalled = true
-              assert.equal(comment, '@fred PR needs to have `master` merged in')
+              assert.equal(comment, '@fred PR needs to have `master` merged in. Automatic merge failed.')
               cb()
             }
           , addLabels: function (labels, cb) {

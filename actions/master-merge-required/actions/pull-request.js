@@ -2,22 +2,15 @@ module.exports = createAction
 
 var updateMasterMergeStatus = require('../lib/update-master-merge-status')
 
-function createAction (serviceLocator) {
+function createAction () {
 
   var action =
     { check: function (ghAction, pr, cb) {
-        var repoManager = serviceLocator.repoManager(pr.owner, pr.repo)
-          , headCommitAuthorIsNotBot = null
-
-        repoManager.getCommit(pr.headSha, function (error, data) {
-          if (error) return cb(error)
-          headCommitAuthorIsNotBot = data.author.name !== serviceLocator.authedUser.username
-
-          if (ghAction === 'opened' || (ghAction === 'synchronize' && headCommitAuthorIsNotBot)) {
-            return cb(null, true)
-          }
-          cb(null, false)
-        })
+        var actions = [ 'opened', 'synchronize' ]
+        if (actions.indexOf(ghAction) > -1) {
+          return cb(null, true)
+        }
+        cb(null, false)
       }
     , exec: updateMasterMergeStatus
     }

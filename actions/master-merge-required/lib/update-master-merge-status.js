@@ -33,7 +33,7 @@ function updateMasterMergeStatus (pr, cb) {
         addStatus(true, cb)
       })
     } else if (!hasNeedMergeLabel && !merged) {
-      comment = '@' + author + ' PR needs to have `master` merged in'
+      comment = '@' + author + ' PR needs to have `master` merged in. Automatic merge failed.'
       pr.addComment(comment, function (error) {
         if (error) return cb(error)
         pr.addLabels([ label ], function (error) {
