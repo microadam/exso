@@ -9,12 +9,12 @@ describe('release-management add-to-release', function () {
     addToRelease({ branch: 'release/test' }, null, null, done)
   })
 
-  it('should comment on original PR if its status is not success', function (done) {
+  it('should comment on original PR if its status is not success and there is a status', function (done) {
     var addCommentCalled = false
       , pr =
           { branch: ''
           , getCurrentStatus: function (cb) {
-              cb(null, { state: 'pending' })
+              cb(null, { state: 'pending', statuses: [ {} ] })
             }
           , addComment: function (comment, cb) {
               addCommentCalled = true
@@ -46,7 +46,7 @@ describe('release-management add-to-release', function () {
           , owner: 'owner'
           , repo: 'repo'
           , getCurrentStatus: function (cb) {
-              cb(null, { state: 'success' })
+              cb(null, { state: 'pending', statuses: [] })
             }
           }
       , addToRelease = null

@@ -16,7 +16,7 @@ function createAddToRelease (serviceLocator) {
       var commentToAdd = null
         , repoManager = null
 
-      if (status.state !== 'success') {
+      if (status.state !== 'success' && status.statuses.length > 0) {
         commentToAdd = '@' + comment.author + ' Not all status checks are passing.' +
            ' Ensure they are before adding to a release.'
         pr.addComment(commentToAdd, cb)
