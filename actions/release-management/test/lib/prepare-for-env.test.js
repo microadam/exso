@@ -33,7 +33,7 @@ describe('release-management prepare for env', function () {
           { headSha: 'abc123'
           , addComment: function (comment, cb) {
               addCommentCalled = true
-              assert.equal(comment, '@dave This release has' +
+              assert.equal(comment, 'This release has' +
                 ' been prepared for staging. Tag `v2.0.0` is ready to deploy.')
               cb()
             }
@@ -82,7 +82,7 @@ describe('release-management prepare for env', function () {
           { headSha: 'abc123'
           , addComment: function (comment, cb) {
               addCommentCalled = true
-              assert.equal(comment, '@dave This release has' +
+              assert.equal(comment, 'This release has' +
                 ' been prepared for staging. Tag `v2.0.0` is ready to deploy.')
               cb()
             }

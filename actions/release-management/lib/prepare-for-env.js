@@ -28,7 +28,7 @@ function createPrepareForEnv (serviceLocator) {
     }
 
     function commentOnReleasePr (cb) {
-      var commentToAdd = '@' + comment.author + ' This release has been prepared ' +
+      var commentToAdd = 'This release has been prepared ' +
             'for ' + env + '. Tag `' + nextVersion + '` is ready to deploy.'
       pr.addComment(commentToAdd, cb)
     }
