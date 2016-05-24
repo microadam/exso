@@ -59,7 +59,7 @@ function createOnStaging (serviceLocator) {
       if (isInReleasePr && hasReadyForStagingLabel) {
         tasks.push(removeLabel.bind(null, 'ready-for-staging', pull))
       }
-      if (isInReleasePr && hasReadyForStagingLabel && hasOnStagingPartialLabel) {
+      if (isInReleasePr && hasOnStagingPartialLabel) {
         tasks.push(removeLabel.bind(null, 'on-staging--partial', pull))
       }
     })
