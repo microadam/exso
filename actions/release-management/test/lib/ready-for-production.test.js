@@ -102,7 +102,7 @@ describe('release-management ready for production', function () {
             }
           , addComment: function (comment, cb) {
               addCommentCalled = true
-              assert.equal(comment, '@dave This release has been prepared for' +
+              assert.equal(comment, 'This release has been prepared for' +
                 ' production. Tag `v2.0.0` is ready to deploy.')
               cb()
             }
