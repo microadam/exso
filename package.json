@@ -2,6 +2,9 @@
   "name": "exso",
   "version": "1.0.0",
   "description": "\"exsolvo\" to release",
+  "engines": {
+    "node": "4.4.4"
+  },
   "main": "index.js",
   "scripts": {
     "test": "istanbul cover _mocha $(find . -path ./node_modules -prune -o -name '*.test.js')",
