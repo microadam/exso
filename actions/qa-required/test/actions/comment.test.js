@@ -14,6 +14,17 @@ describe('qa-required comment action', function () {
     })
   })
 
+  it('should pass check when github action is "created", contains ' +
+     'a non-unicode thumbs up and author is not QAer', function (done) {
+
+    var comment = { body: ':+1:', author: 'dave', issueAuthor: 'steve' }
+    createAction().check('created', comment, function (error, shouldExec) {
+      if (error) return done(error)
+      assert.equal(shouldExec, true, 'shouldExec should be true')
+      done()
+    })
+  })
+
   it('should not pass check when github action is not "created"', function (done) {
     var comment = { body: '👍', author: 'dave', issueAuthor: 'steve' }
     createAction().check('not-created', comment, function (error, shouldExec) {
