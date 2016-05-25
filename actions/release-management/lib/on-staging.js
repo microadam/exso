@@ -10,9 +10,7 @@ function createOnStaging (serviceLocator) {
     repoManager.getOpenPulls(function (error, pulls) {
       if (error) return cb(error)
       var prsInRelease = determinePullsInRelease(pr)
-        , releasePrHasOnStagingPartialLabel = pr.labels.indexOf('on-staging--partial') > -1
         , releasePrHasReadyForStagingLabel = pr.labels.indexOf('ready-for-staging') > -1
-        , releasePrFullyOnStaging = releasePrHasReadyForStagingLabel && !releasePrHasOnStagingPartialLabel
         , statusOptions = null
         , tasks = null
 
@@ -26,7 +24,7 @@ function createOnStaging (serviceLocator) {
 
       tasks = determineTasks(pulls, prsInRelease)
 
-      if (releasePrFullyOnStaging) {
+      if (releasePrHasReadyForStagingLabel) {
         statusOptions =
             { context: 'Been to Staging Check'
             , description: 'has this been to staging?'

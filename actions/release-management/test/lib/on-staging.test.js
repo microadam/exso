@@ -206,38 +206,6 @@ describe('release-management on staging', function () {
     })
   })
 
-  it('should not add been to staging status if release PR has "on-staging--partial"', function (done) {
-    createOnStaging.__set__('determinePullsInRelease', function () { return [] })
-    var beenToStagingCheckCalled = false
-      , openPulls = []
-      , sl =
-          { repoManager: function () {
-              function getOpenPulls (cb) {
-                cb(null, openPulls)
-              }
-              return { getOpenPulls: getOpenPulls }
-            }
-          }
-      , onStaging = createOnStaging(sl)
-      , pr =
-          { labels: [ 'ready-for-staging', 'on-staging--partial' ]
-          , addStatus: function (options, cb) {
-              beenToStagingCheckCalled = true
-              cb()
-            }
-          , addComment: function (c, cb) {
-              cb()
-            }
-          }
-      , comment = {}
-
-    onStaging(pr, comment, null, function (error) {
-      if (error) return done(error)
-      assert.equal(beenToStagingCheckCalled, false, 'should not have had been to staging check applied')
-      done()
-    })
-  })
-
   it('should add completion comment to release PR when all actions complete', function (done) {
     createOnStaging.__set__('determinePullsInRelease', function () { return [] })
     var addCommentCalled = false
