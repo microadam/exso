@@ -1,5 +1,6 @@
 var assert = require('assert')
   , createAction = require('../../actions/comment')
+  , serviceLocator = { config: { qaWhitelist: [] } }
 
 describe('qa-required comment action', function () {
 
@@ -7,7 +8,7 @@ describe('qa-required comment action', function () {
      'a thumbs up and author is not QAer', function (done) {
 
     var comment = { body: '👍', author: 'dave', issueAuthor: 'steve' }
-    createAction().check('created', comment, function (error, shouldExec) {
+    createAction(serviceLocator).check('created', comment, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
       done()
@@ -18,7 +19,21 @@ describe('qa-required comment action', function () {
      'a non-unicode thumbs up and author is not QAer', function (done) {
 
     var comment = { body: ':+1:', author: 'dave', issueAuthor: 'steve' }
-    createAction().check('created', comment, function (error, shouldExec) {
+    createAction(serviceLocator).check('created', comment, function (error, shouldExec) {
+      if (error) return done(error)
+      assert.equal(shouldExec, true, 'shouldExec should be true')
+      done()
+    })
+  })
+
+  it('should pass check when github action is "created", contains ' +
+     'a non-unicode thumbs up and author is whitelisted', function (done) {
+
+    var comment = { body: ':+1:', author: 'steve', issueAuthor: 'steve' }
+
+    serviceLocator.config.qaWhitelist = [ 'steve' ]
+
+    createAction(serviceLocator).check('created', comment, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
       done()
@@ -27,7 +42,7 @@ describe('qa-required comment action', function () {
 
   it('should not pass check when github action is not "created"', function (done) {
     var comment = { body: '👍', author: 'dave', issueAuthor: 'steve' }
-    createAction().check('not-created', comment, function (error, shouldExec) {
+    createAction(serviceLocator).check('not-created', comment, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
       done()
@@ -36,7 +51,7 @@ describe('qa-required comment action', function () {
 
   it('should not pass check when body does not contain thumbs up', function (done) {
     var comment = { body: 'message', author: 'dave', issueAuthor: 'steve' }
-    createAction().check('created', comment, function (error, shouldExec) {
+    createAction(serviceLocator).check('created', comment, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
       done()
@@ -45,7 +60,7 @@ describe('qa-required comment action', function () {
 
   it('should not pass check when author is the same as QAer', function (done) {
     var comment = { body: '👍', author: 'dave', issueAuthor: 'dave' }
-    createAction().check('created', comment, function (error, shouldExec) {
+    createAction(serviceLocator).check('created', comment, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
       done()
