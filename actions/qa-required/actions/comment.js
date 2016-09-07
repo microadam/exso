@@ -6,8 +6,9 @@ function createAction (serviceLocator) {
     { check: function (ghAction, comment, cb) {
         var containsThumbsUp = comment.body.indexOf('👍') > -1 || comment.body.indexOf(':+1:') > -1
           , authorIsNotQaer = comment.author !== comment.issueAuthor
+          , qaerWhiteListed = serviceLocator.config.qaWhitelist.indexOf(comment.author) > -1
 
-        if (ghAction === 'created' && containsThumbsUp && authorIsNotQaer) {
+        if (ghAction === 'created' && containsThumbsUp && (authorIsNotQaer || qaerWhiteListed)) {
           return cb(null, true)
         }
         cb(null, false)
