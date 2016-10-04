@@ -41,7 +41,7 @@ function createNodeCommiter (serviceLocator) {
   function updateFiles (results, version, pr, repoManager, cb) {
     var options =
             { files: []
-            , commitMessage: version
+            , commitMessage: version + ' [ci skip]'
             , baseSha: pr.headSha
             , branch: pr.branch
             }
