@@ -8,7 +8,7 @@ describe('qa-required pull request action', function () {
         , repoManager: function () {
            var repoManager =
                 { getCommit: function (sha, cb) {
-                    cb(null, { author: { name: 'dave' } })
+                    cb(null, { author: { name: 'dave' }, message: 'Test' })
                   }
                 }
             return repoManager
@@ -16,7 +16,7 @@ describe('qa-required pull request action', function () {
         }
 
   it('should pass check when github action is "opened", not release PR and commit not by bot', function (done) {
-    createAction(sl).check('opened', { branch: 'feature/test' }, function (error, shouldExec) {
+    createAction(sl).check('opened', { branch: 'feature/test', labels: [] }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
       done()
@@ -24,7 +24,7 @@ describe('qa-required pull request action', function () {
   })
 
   it('should pass check when github action is "synchronize", not release PR and commit not by bot', function (done) {
-    createAction(sl).check('synchronize', { branch: 'feature/test' }, function (error, shouldExec) {
+    createAction(sl).check('synchronize', { branch: 'feature/test', labels: [] }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
       done()
@@ -32,7 +32,7 @@ describe('qa-required pull request action', function () {
   })
 
   it('should not pass check when github action is not "opened" or "synchronize"', function (done) {
-    createAction(sl).check('closed', { branch: 'feature/test' }, function (error, shouldExec) {
+    createAction(sl).check('closed', { branch: 'feature/test', labels: [] }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
       done()
@@ -40,7 +40,7 @@ describe('qa-required pull request action', function () {
   })
 
   it('should not pass check when is release PR', function (done) {
-    createAction(sl).check('synchronize', { branch: 'release/test' }, function (error, shouldExec) {
+    createAction(sl).check('synchronize', { branch: 'release/test', labels: [] }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
       done()
@@ -53,15 +53,36 @@ describe('qa-required pull request action', function () {
           , repoManager: function () {
              var repoManager =
                   { getCommit: function (sha, cb) {
-                      cb(null, { author: { name: 'bot' } })
+                      cb(null, { author: { name: 'bot' }, message: 'test' })
                     }
                   }
               return repoManager
             }
           }
-    createAction(sl).check('synchronize', { branch: 'feature/test' }, function (error, shouldExec) {
+    createAction(sl).check('synchronize', { branch: 'feature/test', labels: [] }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
+      done()
+    })
+  })
+
+  it('should pass check when commit is a master merge by bot and PR has "qa-required" label', function (done) {
+    var sl =
+          { authedUser: { username: 'bot' }
+          , repoManager: function () {
+             var repoManager =
+                  { getCommit: function (sha, cb) {
+                      cb(null, { author: { name: 'bot' }, message: 'Merge master into test' })
+                    }
+                  }
+              return repoManager
+            }
+          }
+      , labels = [ 'qa-required' ]
+
+    createAction(sl).check('synchronize', { branch: 'feature/test', labels: labels }, function (error, shouldExec) {
+      if (error) return done(error)
+      assert.equal(shouldExec, true, 'shouldExec should be true')
       done()
     })
   })

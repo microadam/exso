@@ -1,5 +1,7 @@
 module.exports = createAction
 
+var label = 'qa-required'
+
 function createAction (serviceLocator) {
 
   var action =
@@ -7,21 +9,27 @@ function createAction (serviceLocator) {
         var actions = [ 'opened', 'synchronize' ]
           , isReleasePr = pr.branch.indexOf('release/') === 0
           , repoManager = serviceLocator.repoManager(pr.owner, pr.repo)
+          , hasLabel = pr.labels.indexOf(label) > -1
           , headCommitAuthorIsNotBot = null
+          , isMasterMergeCommit = null
+          , qaRequiredAfterMasterMerge = null
+          , botCommitRequiresQa = null
 
         repoManager.getCommit(pr.headSha, function (error, data) {
           if (error) return cb(error)
           headCommitAuthorIsNotBot = data.author.name !== serviceLocator.authedUser.username
+          isMasterMergeCommit = !headCommitAuthorIsNotBot && data.message.indexOf('Merge master into') === 0
+          qaRequiredAfterMasterMerge = isMasterMergeCommit && hasLabel
+          botCommitRequiresQa = headCommitAuthorIsNotBot || qaRequiredAfterMasterMerge
 
-          if (actions.indexOf(ghAction) > -1 && !isReleasePr && headCommitAuthorIsNotBot) {
+          if (actions.indexOf(ghAction) > -1 && !isReleasePr && botCommitRequiresQa) {
             return cb(null, true)
           }
           cb(null, false)
         })
       }
     , exec: function (pr, cb) {
-        var label = 'qa-required'
-          , hasLabel = pr.labels.indexOf(label) > -1
+        var hasLabel = pr.labels.indexOf(label) > -1
           , options =
               { context: 'QA Check'
               , description: 'has been QAed?'
