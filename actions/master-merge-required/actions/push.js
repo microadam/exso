@@ -16,7 +16,7 @@ function createAction (serviceLocator) {
         var repoManager = serviceLocator.repoManager(branch.owner, branch.repo)
         repoManager.getOpenPulls(function (error, prs) {
           if (error) return cb(error)
-          async.each(prs, updateMasterMergeStatus, cb)
+          async.eachSeries(prs, updateMasterMergeStatus, cb)
         })
       }
     }
