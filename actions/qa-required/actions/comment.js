@@ -1,5 +1,7 @@
 module.exports = createAction
 
+var removeQaRequired = require('../lib/remove-qa-required')
+
 function createAction (serviceLocator) {
 
   var action =
@@ -14,22 +16,7 @@ function createAction (serviceLocator) {
         cb(null, false)
       }
     , exec: function (comment, cb) {
-        var repoManager = serviceLocator.repoManager(comment.repoOwner, comment.repoName)
-        repoManager.getPull(comment.issueNumber, function (error, pr) {
-          if (error) return cb(error)
-          var label = 'qa-required'
-            , hasLabel = pr.labels.indexOf(label) > -1
-            , options =
-                { context: 'QA Check'
-                , description: 'has been QAed?'
-                , state: 'success'
-                }
-          if (!hasLabel) return cb()
-          pr.addStatus(options, function (error) {
-            if (error) return cb(error)
-            pr.removeLabel(label, cb)
-          })
-        })
+        removeQaRequired(serviceLocator, comment.repoOwner, comment.repoName, comment.issueNumber, cb)
       }
     }
 

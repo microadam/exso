@@ -522,7 +522,7 @@ describe('Repo Manager', function () {
               }
             , events:
               [ 'push', 'pull_request', 'issue_comment', 'create'
-              , 'pull_request_review_comment', 'commit_comment'
+              , 'pull_request_review', 'commit_comment'
               ]
             , active: true
             , name: 'web'

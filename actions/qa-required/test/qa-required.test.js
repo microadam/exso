@@ -7,11 +7,12 @@ describe('qa-required', function () {
     assert.equal(qaRequired.name, 'qa-required')
   })
 
-  it('should handle webhooks of type "pull_request" and "issue_comment"', function () {
+  it('should handle webhooks of type "pull_request", "issue_comment" and "pull_request_review"', function () {
     var actionNames = Object.keys(qaRequired.actions)
-    assert.equal(actionNames.length, 2)
+    assert.equal(actionNames.length, 3)
     assert.equal(actionNames[0], 'pull_request')
-    assert.equal(actionNames[1], 'issue_comment')
+    assert.equal(actionNames[1], 'pull_request_review')
+    assert.equal(actionNames[2], 'issue_comment')
   })
 
 })
