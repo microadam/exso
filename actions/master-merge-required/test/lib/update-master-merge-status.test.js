@@ -310,7 +310,7 @@ describe('update-master-merge-status', function () {
 
     updateMasterMergeStatus(pr, function () {
       assert.equal(removeLabelCalled, false, 'label should not have been removed')
-      assert.equal(addCommentCalled, true, 'comment should have been added')
+      assert.equal(addCommentCalled, false, 'comment should have not have been added')
       assert.equal(addLabelsCalled, false, 'label should not have been added')
       assert.equal(addStatusCalled, true, 'status should have been added')
       done()

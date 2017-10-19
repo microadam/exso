@@ -14,7 +14,7 @@ function updateMasterMergeStatus (pr, cb) {
     , branch = new Branch(data, pr.ghApi)
     , merged = true
 
-  branch.merge('master', function (error, mergeOccured) {
+  branch.merge('master', function (error) {
     /*eslint complexity: [2, 8]*/
     if (error && error.code === 409) {
       merged = false
@@ -40,12 +40,6 @@ function updateMasterMergeStatus (pr, cb) {
           if (error) return cb(error)
           addStatus(false, cb)
         })
-      })
-    } else if (merged && mergeOccured) {
-      comment = '@' + author + ' this PR has automatically had `master` merged in'
-      pr.addComment(comment, function (error) {
-        if (error) return cb(error)
-        addStatus(true, cb)
       })
     } else if (merged) {
       addStatus(true, cb)
