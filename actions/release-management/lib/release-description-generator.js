@@ -12,7 +12,7 @@ function createReleaseDescription () {
       , lineToAdd = '- #' + prToAdd.number + ' `' + prToAdd.title + '`'
 
     if (fixes.indexOf(lineToAdd) === -1 && features.indexOf(lineToAdd) === -1) {
-      if (prToAdd.branch.indexOf('bug/') === 0) {
+      if (prToAdd.branch.indexOf('bug/') === 0 || prToAdd.branch.indexOf('fix/') === 0) {
         fixes.push(lineToAdd)
       } else if (prToAdd.branch.indexOf('feature/') === 0) {
         features.push(lineToAdd)

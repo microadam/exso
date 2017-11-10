@@ -8,7 +8,7 @@ An opinionated GitHub bot that aids you and your team in managing releases.
 
 ### Feature PRs
 
-All Feature PRs should have their branch prefixed with either `feature/` or `bug/`.
+All Feature PRs should have their branch prefixed with either `feature/` or `bug/` or `fix/`.
 
 #### Mark as QAed
 
