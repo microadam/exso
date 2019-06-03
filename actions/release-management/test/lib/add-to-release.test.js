@@ -9,10 +9,35 @@ describe('release-management add-to-release', function () {
     addToRelease({ branch: 'release/test' }, null, null, done)
   })
 
+  it('should comment on original PR if base branch is not master', function (done) {
+    var addCommentCalled = false
+      , pr =
+          { branch: ''
+          , baseRef: 'feature/test'
+          , getCurrentStatus: function (cb) {
+              cb(null, { state: 'pending', statuses: [ {} ] })
+            }
+          , addComment: function (comment, cb) {
+              addCommentCalled = true
+              assert.equal(comment, '@microadam Only Pull Requests based off of `master` can be merged' +
+                ' into to a release. Please merge this Pull Request and then add the base branch to the release.')
+              cb()
+            }
+          }
+      , addToRelease = createAddToRelease()
+
+    addToRelease(pr, { author: 'microadam' }, null, function (error) {
+      if (error) return done(error)
+      assert.equal(addCommentCalled, true, 'comment was not added')
+      done()
+    })
+  })
+
   it('should comment on original PR if its status is not success and there is a status', function (done) {
     var addCommentCalled = false
       , pr =
           { branch: ''
+          , baseRef: 'master'
           , getCurrentStatus: function (cb) {
               cb(null, { state: 'pending', statuses: [ {} ] })
             }
@@ -43,6 +68,7 @@ describe('release-management add-to-release', function () {
           }
       , pr =
           { branch: 'branch'
+          , baseRef: 'master'
           , owner: 'owner'
           , repo: 'repo'
           , getCurrentStatus: function (cb) {
@@ -81,6 +107,7 @@ describe('release-management add-to-release', function () {
           }
       , pr =
           { branch: 'branch'
+          , baseRef: 'master'
           , owner: 'owner'
           , repo: 'repo'
           , getCurrentStatus: function (cb) {
@@ -119,6 +146,7 @@ describe('release-management add-to-release', function () {
           }
       , pr =
           { branch: 'branch'
+          , baseRef: 'master'
           , owner: 'owner'
           , repo: 'repo'
           , getCurrentStatus: function (cb) {
