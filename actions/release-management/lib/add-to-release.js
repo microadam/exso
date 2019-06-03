@@ -11,6 +11,11 @@ function createAddToRelease (serviceLocator) {
   function addToRelease (pr, comment, releaseNameNumber, cb) {
     // don't run on release PRs
     if (pr.branch.indexOf('release/') === 0) return cb()
+    if (pr.baseRef !== 'master') {
+      var commentToAdd = '@' + comment.author + ' Only Pull Requests based off of `master` ' +
+        'can be merged into to a release. Please merge this Pull Request and then add the base branch to the release.'
+      return pr.addComment(commentToAdd, cb)
+    }
     pr.getCurrentStatus(function (error, status) {
       if (error) return cb(error)
       var commentToAdd = null
