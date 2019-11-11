@@ -42,6 +42,9 @@ function createExistingReleaseAdder (serviceLocator) {
       tasks.push(releasePr.addLabels.bind(releasePr, [ 'on-staging--partial' ]))
     }
     tasks.push(applySemverLabel.bind(null, releasePr))
+    if (originalPr.labels.indexOf('add-to-next-release') > -1) {
+      tasks.push(originalPr.removeLabel.bind(originalPr, 'add-to-next-release'))
+    }
 
     async.parallel(tasks, function (error) {
       if (error) return cb(error)

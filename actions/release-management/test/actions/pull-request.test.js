@@ -1,5 +1,14 @@
 var assert = require('assert')
-  , action = require('../../actions/pull-request')()
+  , sl =
+      { repoManager: function () {
+          return { getOpenPulls: function (cb) {
+              cb(null, [])
+            }
+          }
+        }
+
+      }
+  , action = require('../../actions/pull-request')(sl)
 
 describe('release-management pull request action', function () {
 

@@ -11,7 +11,6 @@ function createAction (serviceLocator) {
 
   var fns =
         { addToRelease: createAddToRelease(serviceLocator)
-        // , removeFromRelease: removeFromRelease
         , readyForStaging: createReadyForStaging(serviceLocator)
         , onStaging: createOnStaging(serviceLocator)
         , readyForProduction: createReadyForProduction(serviceLocator)

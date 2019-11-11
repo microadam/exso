@@ -644,6 +644,16 @@ describe('Repo Manager', function () {
           , { name: 'semver/patch', color: 'c5def5' })
         .reply(200)
 
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'add-to-any-release', color: '33acbf' })
+        .reply(200)
+
+      nock('https://api.github.com')
+        .post('/repos/microadam/exso-test/labels?access_token=' + token
+          , { name: 'add-to-next-release', color: 'baf265' })
+        .reply(200)
+
       runTest(action, done)
     })
 

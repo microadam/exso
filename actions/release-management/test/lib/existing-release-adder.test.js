@@ -22,7 +22,8 @@ describe('release-management existing-release-adder', function () {
             }
           }
       , pr =
-          { addComment: function (comment, cb) {
+          { labels: []
+          , addComment: function (comment, cb) {
               addCommentCalled = true
               assert.equal(comment, '@microadam Conflicts were encountered when merging ' +
                 'into the release. Please get a developer to manually merge. Once complete,' +
@@ -71,6 +72,7 @@ describe('release-management existing-release-adder', function () {
           }
       , pr =
           { number: 20
+          , labels: []
           , title: 'My Title'
           , branch: 'bug/test'
           , addComment: function (comment, cb) {
@@ -125,6 +127,7 @@ describe('release-management existing-release-adder', function () {
           { number: 20
           , title: 'My Title'
           , branch: 'bug/test'
+          , labels: []
           , addComment: function (comment, cb) {
               addCommentCalled = true
               assert.equal(comment, 'This PR has been successfully merged into Release #11.')
@@ -176,6 +179,7 @@ describe('release-management existing-release-adder', function () {
           { number: 20
           , title: 'My Title'
           , branch: 'bug/test'
+          , labels: []
           , addComment: function (comment, cb) {
               addCommentCalled = true
               assert.equal(comment, 'This PR has been successfully merged into Release #11.')
@@ -227,6 +231,7 @@ describe('release-management existing-release-adder', function () {
           { number: 20
           , title: 'My Title'
           , branch: 'bug/test'
+          , labels: []
           , addComment: function (comment, cb) {
               addCommentCalled = true
               assert.equal(comment, 'This PR has been successfully merged into Release #11.')
