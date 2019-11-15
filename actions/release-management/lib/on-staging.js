@@ -5,7 +5,7 @@ var async = require('async')
 
 function createOnStaging (serviceLocator) {
 
-  function onStaging (pr, comment, actionValue, cb) {
+  function onStaging (pr, comment, actionValue, skipStatusChecks, cb) {
     var repoManager = serviceLocator.repoManager(pr.owner, pr.repo)
     repoManager.getOpenPulls(function (error, pulls) {
       if (error) return cb(error)

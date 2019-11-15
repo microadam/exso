@@ -126,7 +126,7 @@ describe('release-management on staging', function () {
           }
       , comment = {}
 
-    onStaging(pr, comment, null, function (error) {
+    onStaging(pr, comment, null, false, function (error) {
       if (error) return done(error)
       assert.equal(onStagingLabelRemovedCallCount, 1)
       assert.equal(onStagingLabelAddedCallCount, 4)
@@ -167,7 +167,7 @@ describe('release-management on staging', function () {
           }
       , comment = {}
 
-    onStaging(pr, comment, null, function (error) {
+    onStaging(pr, comment, null, false, function (error) {
       if (error) return done(error)
       assert.equal(beenToStagingCheckCalled, true, 'should have had been to staging check applied')
       done()
@@ -199,7 +199,7 @@ describe('release-management on staging', function () {
           }
       , comment = {}
 
-    onStaging(pr, comment, null, function (error) {
+    onStaging(pr, comment, null, false, function (error) {
       if (error) return done(error)
       assert.equal(beenToStagingCheckCalled, false, 'should not have had been to staging check applied')
       done()
@@ -232,7 +232,7 @@ describe('release-management on staging', function () {
           }
       , comment = { author: 'dave' }
 
-    onStaging(pr, comment, null, function (error) {
+    onStaging(pr, comment, null, false, function (error) {
       if (error) return done(error)
       assert.equal(addCommentCalled, true, 'should have added a comment')
       done()

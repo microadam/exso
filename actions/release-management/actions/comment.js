@@ -32,7 +32,7 @@ function createAction (serviceLocator) {
               , fn = fns[actionToTake.name]
 
             if (fn) {
-              fn(pr, comment, actionToTake.value, cb)
+              fn(pr, comment, actionToTake.value, actionToTake.skipStatusChecks, cb)
             } else {
               cb()
             }

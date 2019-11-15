@@ -67,7 +67,7 @@ describe('release-management comment action', function () {
       , comment = null
 
     createAction.__set__('createAddToRelease', function () {
-      return function addToRelease (pr, comment, actionValue, cb) {
+      return function addToRelease (pr, comment, actionValue, skipStatusChecks, cb) {
         addToReleaseCalled = true
         assert.equal(actionValue, 'test')
         cb()

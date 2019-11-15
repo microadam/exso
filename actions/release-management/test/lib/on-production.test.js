@@ -31,7 +31,7 @@ describe('release-management on production', function () {
           }
       , comment = { author: 'dave' }
 
-    onProduction(pr, comment, null, function (error) {
+    onProduction(pr, comment, null, false, function (error) {
       if (error) return done(error)
       assert.equal(addCommentCalled, true, 'should have added a comment')
       done()
@@ -106,7 +106,7 @@ describe('release-management on production', function () {
           }
       , comment = { author: 'dave' }
 
-    onProduction(pr, comment, null, function (error) {
+    onProduction(pr, comment, null, false, function (error) {
       if (error) return done(error)
       assert.equal(onProductionLabelAddedCallCount, 2)
       assert.equal(readyForProductionLabelRemovedCallCount, 1)
@@ -140,7 +140,7 @@ describe('release-management on production', function () {
           }
       , comment = { author: 'dave' }
 
-    onProduction(pr, comment, null, function (error) {
+    onProduction(pr, comment, null, false, function (error) {
       if (error) return done(error)
       assert.equal(addCommentCalled, true, 'should have added a comment')
       done()

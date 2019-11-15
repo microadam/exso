@@ -7,7 +7,7 @@ function createReadyForStaging (serviceLocator) {
 
   var prepareForEnv = createPrepareForEnv(serviceLocator)
 
-  function readyForStaging (pr, comment, actionValue, cb) {
+  function readyForStaging (pr, comment, actionValue, skipStatusChecks, cb) {
     // only run on release PRs
     if (pr.branch.indexOf('release/') === -1) return cb()
     // dont run if already prepared for staging
@@ -17,7 +17,7 @@ function createReadyForStaging (serviceLocator) {
       var commentToAdd = null
         , repoManager = null
 
-      if (status.state !== 'success') {
+      if (!skipStatusChecks && status.state !== 'success') {
         commentToAdd = '@' + comment.author + ' Not all status checks are passing.' +
               ' Ensure they are before preparing for staging.'
         pr.addComment(commentToAdd, cb)

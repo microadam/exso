@@ -5,12 +5,12 @@ describe('release-management ready for staging', function () {
 
   it('should do nothing if run on a non release PR', function (done) {
     var readyForStaging = createReadyForStaging()
-    readyForStaging({ branch: 'feature/test' }, null, null, done)
+    readyForStaging({ branch: 'feature/test' }, null, null, false, done)
   })
 
   it('should do nothing if PR is already "ready for staging"', function (done) {
     var readyForStaging = createReadyForStaging()
-    readyForStaging({ branch: 'release/test', labels: [ 'ready-for-staging' ] }, null, null, done)
+    readyForStaging({ branch: 'release/test', labels: [ 'ready-for-staging' ] }, null, null, false, done)
   })
 
   it('should add a comment to the PR if not passing status checks', function (done) {
@@ -29,7 +29,7 @@ describe('release-management ready for staging', function () {
               cb()
             }
           }
-    readyForStaging(pr, { author: 'dave' }, null, function (error) {
+    readyForStaging(pr, { author: 'dave' }, null, false, function (error) {
       if (error) return done(error)
       assert.equal(addCommentCalled, true, 'comment was not added')
       done()
@@ -79,7 +79,7 @@ describe('release-management ready for staging', function () {
               cb()
             }
           }
-    readyForStaging(pr, { author: 'dave' }, null, function (error) {
+    readyForStaging(pr, { author: 'dave' }, null, false, function (error) {
       if (error) return done(error)
       assert.equal(createTagCalled, true, 'tag was not created')
       assert.equal(addCommentCalled, true, 'comment was not added')

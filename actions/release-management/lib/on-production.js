@@ -5,7 +5,7 @@ var async = require('async')
 
 function createOnProduction (serviceLocator) {
 
-  function onProduction (pr, comment, mergeToMaster, cb) {
+  function onProduction (pr, comment, actionValue, skipStatusChecks, cb) {
     var commentToAdd = null
       , repoManager = null
 

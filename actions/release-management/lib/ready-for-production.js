@@ -10,7 +10,7 @@ function createReadyForProduction (serviceLocator) {
   var prepareForEnv = createPrepareForEnv(serviceLocator)
     , generateAndCommitChangelog = createChangelogGenerator(serviceLocator)
 
-  function readyForProduction (pr, comment, actionValue, cb) {
+  function readyForProduction (pr, comment, actionValue, skipStatusChecks, cb) {
     // only run on release PRs
     if (pr.branch.indexOf('release/') === -1) return cb()
     // dont run if already prepared for production
@@ -21,7 +21,7 @@ function createReadyForProduction (serviceLocator) {
         , repoManager = null
         , hasBeenToStaging = findWhere(status.statuses, { context: 'Been to Staging Check' })
 
-      if (status.state !== 'success' || !hasBeenToStaging) {
+      if (!skipStatusChecks && (status.state !== 'success' || !hasBeenToStaging)) {
         commentToAdd = '@' + comment.author + ' Please ensure all status checks' +
           ' are passing and that this release has previously been on staging' +
           ' before preparing for production.'

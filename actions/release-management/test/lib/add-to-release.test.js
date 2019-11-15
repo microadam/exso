@@ -6,7 +6,7 @@ describe('release-management add-to-release', function () {
 
   it('should do nothing if this is a release PR', function (done) {
     var addToRelease = createAddToRelease()
-    addToRelease({ branch: 'release/test' }, null, null, done)
+    addToRelease({ branch: 'release/test' }, null, null, false, done)
   })
 
   it('should comment on original PR if base branch is not master', function (done) {
@@ -26,7 +26,7 @@ describe('release-management add-to-release', function () {
           }
       , addToRelease = createAddToRelease()
 
-    addToRelease(pr, { author: 'microadam' }, null, function (error) {
+    addToRelease(pr, { author: 'microadam' }, null, false, function (error) {
       if (error) return done(error)
       assert.equal(addCommentCalled, true, 'comment was not added')
       done()
@@ -50,9 +50,48 @@ describe('release-management add-to-release', function () {
           }
       , addToRelease = createAddToRelease()
 
-    addToRelease(pr, { author: 'microadam' }, null, function (error) {
+    addToRelease(pr, { author: 'microadam' }, null, false, function (error) {
       if (error) return done(error)
       assert.equal(addCommentCalled, true, 'comment was not added')
+      done()
+    })
+  })
+
+  it('should not comment on original PR if status check has been skipped and status have failed', function (done) {
+    var createNewReleaseCalled = false
+      , sl =
+          { repoManager: function (owner, repo) {
+              assert.equal(owner, 'owner')
+              assert.equal(repo, 'repo')
+              return 'repoManager'
+            }
+          }
+      , pr =
+          { branch: 'branch'
+          , baseRef: 'master'
+          , owner: 'owner'
+          , repo: 'repo'
+          , getCurrentStatus: function (cb) {
+              cb(null, { state: 'pending', statuses: [ {} ] })
+            }
+          }
+      , addToRelease = null
+
+    createAddToRelease.__set__('createReleaseCreator', function () {
+      return function createNewRelease (releaseNameNumber, pr, comment, repoManager, cb) {
+        createNewReleaseCalled = true
+        assert.equal(releaseNameNumber, null)
+        assert.equal(pr.branch, 'branch')
+        assert.equal(comment, 'comment')
+        assert.equal(repoManager, 'repoManager')
+        cb()
+      }
+    })
+
+    addToRelease = createAddToRelease(sl)
+    addToRelease(pr, 'comment', null, true, function (error) {
+      if (error) return done(error)
+      assert.equal(createNewReleaseCalled, true, 'createNewRelease was not called')
       done()
     })
   })
@@ -89,7 +128,7 @@ describe('release-management add-to-release', function () {
     })
 
     addToRelease = createAddToRelease(sl)
-    addToRelease(pr, 'comment', null, function (error) {
+    addToRelease(pr, 'comment', null, false, function (error) {
       if (error) return done(error)
       assert.equal(createNewReleaseCalled, true, 'createNewRelease was not called')
       done()
@@ -128,7 +167,7 @@ describe('release-management add-to-release', function () {
     })
 
     addToRelease = createAddToRelease(sl)
-    addToRelease(pr, 'comment', 'dave', function (error) {
+    addToRelease(pr, 'comment', 'dave', false, function (error) {
       if (error) return done(error)
       assert.equal(createNewReleaseCalled, true, 'createNewRelease was not called')
       done()
@@ -167,7 +206,7 @@ describe('release-management add-to-release', function () {
     })
 
     addToRelease = createAddToRelease(sl)
-    addToRelease(pr, 'comment', 1, function (error) {
+    addToRelease(pr, 'comment', 1, false, function (error) {
       if (error) return done(error)
       assert.equal(addToExistingReleaseCalled, true, 'addToExistingRelease was not called')
       done()

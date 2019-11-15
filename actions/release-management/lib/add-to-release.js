@@ -8,7 +8,7 @@ function createAddToRelease (serviceLocator) {
   var createNewRelease = createReleaseCreator(serviceLocator)
     , addToExistingRelease = createExistingReleaseAdder(serviceLocator)
 
-  function addToRelease (pr, comment, releaseNameNumber, cb) {
+  function addToRelease (pr, comment, releaseNameNumber, skipStatusChecks, cb) {
     // don't run on release PRs
     if (pr.branch.indexOf('release/') === 0) return cb()
     if (pr.baseRef !== 'master') {
@@ -21,7 +21,7 @@ function createAddToRelease (serviceLocator) {
       var commentToAdd = null
         , repoManager = null
 
-      if (status.state !== 'success' && status.statuses.length > 0) {
+      if (!skipStatusChecks && status.state !== 'success' && status.statuses.length > 0) {
         commentToAdd = '@' + comment.author + ' Not all status checks are passing.' +
            ' Ensure they are before adding to a release.'
         pr.addComment(commentToAdd, cb)

@@ -5,12 +5,12 @@ describe('release-management ready for production', function () {
 
   it('should do nothing if run on a non release PR', function (done) {
     var readyForProduction = createReadyForProduction()
-    readyForProduction({ branch: 'feature/test' }, null, null, done)
+    readyForProduction({ branch: 'feature/test' }, null, null, false, done)
   })
 
   it('should do nothing if PR is already "ready for production"', function (done) {
     var readyForProduction = createReadyForProduction()
-    readyForProduction({ branch: 'release/test', labels: [ 'ready-for-production' ] }, null, null, done)
+    readyForProduction({ branch: 'release/test', labels: [ 'ready-for-production' ] }, null, null, false, done)
   })
 
   it('should add a comment to the PR if not passing status checks', function (done) {
@@ -30,7 +30,7 @@ describe('release-management ready for production', function () {
               cb()
             }
           }
-    readyForProduction(pr, { author: 'dave' }, null, function (error) {
+    readyForProduction(pr, { author: 'dave' }, null, false, function (error) {
       if (error) return done(error)
       assert.equal(addCommentCalled, true, 'comment was not added')
       done()
@@ -54,7 +54,7 @@ describe('release-management ready for production', function () {
               cb()
             }
           }
-    readyForProduction(pr, { author: 'dave' }, null, function (error) {
+    readyForProduction(pr, { author: 'dave' }, null, false, function (error) {
       if (error) return done(error)
       assert.equal(addCommentCalled, true, 'comment was not added')
       done()
@@ -112,7 +112,7 @@ describe('release-management ready for production', function () {
               cb()
             }
           }
-    readyForProduction(pr, { author: 'dave' }, null, function (error) {
+    readyForProduction(pr, { author: 'dave' }, null, false, function (error) {
       if (error) return done(error)
       assert.equal(createTagCalled, true, 'tag was not created')
       assert.equal(addCommentCalled, true, 'comment was not added')
