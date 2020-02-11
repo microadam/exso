@@ -63,14 +63,13 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/issues?state=open&per_page=100&access_token=' + token)
+        .get('/repos/microadam/exso-test/issues?state=open&per_page=100')
         .reply(200, [ { number: 11, labels: [ { name: 'my-label' } ] } ])
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/pulls?state=open&base=master&per_page=100&access_token=' + token)
+        .get('/repos/microadam/exso-test/pulls?state=open&base=master&per_page=100')
         .reply(200, [ pullRequestFixture ])
 
       runTest(action, done)
@@ -100,14 +99,13 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/pulls/11?access_token=' + token)
+        .get('/repos/microadam/exso-test/pulls/11')
         .reply(200, pullRequestFixture)
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/issues/11?access_token=' + token)
+        .get('/repos/microadam/exso-test/issues/11')
         .reply(200, { labels: [ { name: 'my-label' } ] })
 
       runTest(action, done)
@@ -136,10 +134,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/pulls?access_token=' + token
+        .post('/repos/microadam/exso-test/pulls'
         , { title: 'title'
           , body: 'body'
           , head: 'release/test'
@@ -177,10 +174,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/git/refs/heads%2Frelease%2Ftest-bla?access_token=' + token)
+        .get('/repos/microadam/exso-test/git/refs/heads%2Frelease%2Ftest-bla')
         .reply(200, referenceFixture)
 
       runTest(action, done)
@@ -214,10 +210,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/git/refs?access_token=' + token
+        .post('/repos/microadam/exso-test/git/refs'
         , { ref: 'refs/heads/release/test-bla'
           , sha: 'b0e588f7604018f90024ca9bc80f181cad2a2cfe'
           })
@@ -245,10 +240,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/tags?per_page=100&access_token=' + token)
+        .get('/repos/microadam/exso-test/tags?per_page=100')
         .reply(200)
 
       runTest(action, done)
@@ -273,10 +267,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/git/commits/abc123?access_token=' + token)
+        .get('/repos/microadam/exso-test/git/commits/abc123')
         .reply(200)
 
       runTest(action, done)
@@ -302,10 +295,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/git/refs?access_token=' + token
+        .post('/repos/microadam/exso-test/git/refs'
         , { ref: 'refs/tags/v1.0.0'
           , sha: 'b0e588f7604018f90024ca9bc80f181cad2a2cfe'
           })
@@ -339,10 +331,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/contents/package.json?ref=master&access_token=' + token)
+        .get('/repos/microadam/exso-test/contents/package.json?ref=master')
         .reply(200, { content: 'ewogICJuYW1lIjogImV4c28tdGVzdCIsCiAgInZlcnNp' +
           'b24iOiAidjIuMC4wIiwKICAiZGVwZW5kZW5jaWVzIjoge30KfQo', sha: 'abc123' })
 
@@ -372,10 +363,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .put('/repos/microadam/exso-test/contents/package.json?access_token=' + token
+        .put('/repos/microadam/exso-test/contents/package.json'
           , { message: 'msg'
             , content: 'Y29udGVudHM='
             , branch: 'master'
@@ -410,10 +400,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .put('/repos/microadam/exso-test/contents/package.json?access_token=' + token
+        .put('/repos/microadam/exso-test/contents/package.json'
           , { message: 'msg'
             , content: 'Y29udGVudHM='
             , branch: 'master'
@@ -456,10 +445,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/git/trees?access_token=' + token
+        .post('/repos/microadam/exso-test/git/trees'
         , { tree:
             [ { mode: '100644'
               , type: 'blob'
@@ -477,7 +465,7 @@ describe('Repo Manager', function () {
         .reply(200, { sha: 'def456' })
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/git/commits?access_token=' + token
+        .post('/repos/microadam/exso-test/git/commits'
         , { message: 'commit message'
           , tree: 'def456'
           , parents: [ 'abc123' ]
@@ -485,7 +473,7 @@ describe('Repo Manager', function () {
         .reply(200, { sha: 'ghi789' })
 
       nock('https://api.github.com')
-        .patch('/repos/microadam/exso-test/git/refs/heads%2Ffeature%2Ftest?access_token=' + token
+        .patch('/repos/microadam/exso-test/git/refs/heads%2Ffeature%2Ftest'
         , { sha: 'ghi789' })
         .reply(200)
 
@@ -511,10 +499,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/hooks?access_token=' + token
+        .post('/repos/microadam/exso-test/hooks'
           , { config:
               { url: 'http://my.site/github/webhook'
               , 'content_type': 'json'
@@ -551,18 +538,17 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/labels?access_token=' + token)
+        .get('/repos/microadam/exso-test/labels')
         .reply(200, [ { name: 'test' }, { name: 'test-two' } ])
 
       nock('https://api.github.com')
-        .delete('/repos/microadam/exso-test/labels/test?access_token=' + token)
+        .delete('/repos/microadam/exso-test/labels/test')
         .reply(200)
 
       nock('https://api.github.com')
-        .delete('/repos/microadam/exso-test/labels/test-two?access_token=' + token)
+        .delete('/repos/microadam/exso-test/labels/test-two')
         .reply(200)
 
       runTest(action, done)
@@ -587,70 +573,69 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'needs-master-merge', color: 'b60205' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'qa-required', color: '1d76db' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'release', color: 'd4c5f9' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'ready-for-staging', color: 'fef2c0' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'on-staging', color: 'fbca04' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'on-staging--partial', color: 'd93f0b' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'ready-for-production', color: 'c2e0c6' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'on-production', color: '0e8a16' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'semver/major', color: 'c5def5' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'semver/minor', color: 'c5def5' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'semver/patch', color: 'c5def5' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'add-to-any-release', color: '33acbf' })
         .reply(200)
 
       nock('https://api.github.com')
-        .post('/repos/microadam/exso-test/labels?access_token=' + token
+        .post('/repos/microadam/exso-test/labels'
           , { name: 'add-to-next-release', color: 'baf265' })
         .reply(200)
 
@@ -676,10 +661,9 @@ describe('Repo Manager', function () {
                 }
               }
             }
-        , token = serviceLocator.secrets.githubToken
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/git/refs?per_page=100&access_token=' + token)
+        .get('/repos/microadam/exso-test/git/refs?per_page=100')
         .reply(200,
           [ { ref: 'refs/heads/master', object: { sha: 'abc123' } }
           , { ref: 'refs/heads/test', object: { sha: 'def456' } }
@@ -689,15 +673,15 @@ describe('Repo Manager', function () {
           ])
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/compare/abc123...def456?access_token=' + token)
+        .get('/repos/microadam/exso-test/compare/abc123...def456')
         .reply(200, { 'ahead_by': 1 })
 
       nock('https://api.github.com')
-        .get('/repos/microadam/exso-test/compare/abc123...ghi789?access_token=' + token)
+        .get('/repos/microadam/exso-test/compare/abc123...ghi789')
         .reply(200, { 'ahead_by': 0 })
 
       nock('https://api.github.com')
-        .delete('/repos/microadam/exso-test/git/refs/heads%2Ffeature%2Fa?access_token=' + token)
+        .delete('/repos/microadam/exso-test/git/refs/heads%2Ffeature%2Fa')
         .reply(200)
 
       runTest(action, done)

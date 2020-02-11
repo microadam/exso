@@ -20,7 +20,7 @@ describe('pull request', function () {
   function runTest (action, cb) {
 
     nock('https://api.github.com')
-      .get('/repos/microadam/exso-test/issues/11?access_token=' + serviceLocator.secrets.githubToken)
+      .get('/repos/microadam/exso-test/issues/11')
       .reply(200, { labels: [ { name: 'my-label' } ] })
 
     bootstrap(serviceLocator, [ action ], function (error, serviceLocator) {
@@ -96,7 +96,7 @@ describe('pull request', function () {
           }
 
     nock('https://api.github.com')
-      .patch('/repos/microadam/exso-test/pulls/11?access_token=' + serviceLocator.secrets.githubToken
+      .patch('/repos/microadam/exso-test/pulls/11'
       , { state: 'closed' })
       .reply(200)
 
@@ -123,7 +123,7 @@ describe('pull request', function () {
           }
 
     nock('https://api.github.com')
-      .patch('/repos/microadam/exso-test/pulls/11?access_token=' + serviceLocator.secrets.githubToken
+      .patch('/repos/microadam/exso-test/pulls/11'
       , { body: 'test' })
       .reply(200)
 
@@ -149,7 +149,7 @@ describe('pull request', function () {
           }
 
     nock('https://api.github.com')
-      .post('/repos/microadam/exso-test/issues/11/comments?access_token=' + serviceLocator.secrets.githubToken
+      .post('/repos/microadam/exso-test/issues/11/comments'
       , { body: 'This is a message' })
       .reply(200)
 
@@ -174,7 +174,7 @@ describe('pull request', function () {
           }
 
     nock('https://api.github.com')
-      .patch('/repos/microadam/exso-test/issues/11?access_token=' + serviceLocator.secrets.githubToken
+      .patch('/repos/microadam/exso-test/issues/11'
       , { assignee: 'dave' })
       .reply(200)
 
@@ -199,7 +199,7 @@ describe('pull request', function () {
           }
 
     nock('https://api.github.com')
-      .post('/repos/microadam/exso-test/issues/11/labels?access_token=' + serviceLocator.secrets.githubToken
+      .post('/repos/microadam/exso-test/issues/11/labels'
       , [ 'test', 'test-two' ])
       .reply(200)
 
@@ -224,7 +224,7 @@ describe('pull request', function () {
           }
 
     nock('https://api.github.com')
-      .delete('/repos/microadam/exso-test/issues/11/labels/test?access_token=' + serviceLocator.secrets.githubToken)
+      .delete('/repos/microadam/exso-test/issues/11/labels/test')
       .reply(200)
 
     runTest(action, function (error) {
@@ -278,7 +278,7 @@ describe('pull request', function () {
           }
 
     nock('https://api.github.com')
-      .get('/repos/microadam/exso-test/pulls/11?access_token=' + serviceLocator.secrets.githubToken)
+      .get('/repos/microadam/exso-test/pulls/11')
       .reply(200, { mergeable: true })
 
     runTest(action, function (error) {
@@ -307,7 +307,7 @@ describe('pull request', function () {
             }
           }
         , path = '/repos/microadam/exso-test/statuses/' +
-              '5ba66f068737fe24e37ebb1ea4f6e9b5cdc09624?access_token=' + serviceLocator.secrets.githubToken
+              '5ba66f068737fe24e37ebb1ea4f6e9b5cdc09624'
 
     nock('https://api.github.com')
       .post(path
@@ -342,7 +342,7 @@ describe('pull request', function () {
             }
           }
         , path = '/repos/microadam/exso-test/commits/' +
-              '5ba66f068737fe24e37ebb1ea4f6e9b5cdc09624/status?access_token=' + serviceLocator.secrets.githubToken
+              '5ba66f068737fe24e37ebb1ea4f6e9b5cdc09624/status'
 
     nock('https://api.github.com')
       .get(path)

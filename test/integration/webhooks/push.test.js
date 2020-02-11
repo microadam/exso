@@ -82,7 +82,7 @@ describe('push', function () {
           }
 
     nock('https://api.github.com')
-      .post('/repos/microadam/exso-test/merges?access_token=' + serviceLocator.secrets.githubToken
+      .post('/repos/microadam/exso-test/merges'
       , { base: 'master'
         , head: 'feature/test'
         })
@@ -113,7 +113,7 @@ describe('push', function () {
           }
 
     nock('https://api.github.com')
-      .post('/repos/microadam/exso-test/merges?access_token=' + serviceLocator.secrets.githubToken
+      .post('/repos/microadam/exso-test/merges'
       , { base: 'master'
         , head: 'feature/test'
         })
