@@ -9,7 +9,11 @@ function createReadyForStaging (serviceLocator) {
 
   function readyForStaging (pr, comment, actionValue, skipStatusChecks, cb) {
     // only run on release PRs
-    if (pr.branch.indexOf('release/') === -1) return cb()
+    if (pr.branch.indexOf('release/') === -1) {
+      var helpComment = '@' + comment.author + ' You are trying to release a ' +
+        'feature branch, please switch to the release branch and rerun the command.'
+      return pr.addComment(helpComment, cb)
+    }
     // dont run if already prepared for staging
     if (pr.labels.indexOf('ready-for-staging') > -1) return cb()
     pr.getCurrentStatus(function (error, status) {

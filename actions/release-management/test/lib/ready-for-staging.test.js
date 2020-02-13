@@ -3,9 +3,27 @@ var assert = require('assert')
 
 describe('release-management ready for staging', function () {
 
-  it('should do nothing if run on a non release PR', function (done) {
+  it('should add a comment if run on a non release PR', function (done) {
     var readyForStaging = createReadyForStaging()
-    readyForStaging({ branch: 'feature/test' }, null, null, false, done)
+      , addCommentCalled = false
+      , pr =
+          { branch: 'feature/test'
+          , labels: []
+          , getCurrentStatus: function (cb) {
+              cb(null, { state: 'success' })
+            }
+          , addComment: function (comment, cb) {
+              addCommentCalled = true
+              assert.equal(comment, '@dave You are trying to release a feature ' +
+                'branch, please switch to the release branch and rerun the command.')
+              cb()
+            }
+          }
+    readyForStaging(pr, { author: 'dave' }, null, false, function (error) {
+      if (error) return done(error)
+      assert.equal(addCommentCalled, true, 'comment was not added')
+      done()
+    })
   })
 
   it('should do nothing if PR is already "ready for staging"', function (done) {
