@@ -20,7 +20,7 @@ describe('release-management node file commiter', function () {
             , content: '{\n  "version": "2.0.0"\n}\n'
             }
           ]
-        , commitMessage: 'v2.0.0 [ci skip]'
+        , commitMessage: 'v2.0.0 ***no_ci***'
         , baseSha: 'abc123'
         , branch: 'release/test'
         }
@@ -63,7 +63,7 @@ describe('release-management node file commiter', function () {
             , content: '{\n  "version": "2.0.0"\n}\n'
             }
           ]
-        , commitMessage: 'v2.0.0 [ci skip]'
+        , commitMessage: 'v2.0.0 ***no_ci***'
         , baseSha: 'abc123'
         , branch: 'release/test'
         }
