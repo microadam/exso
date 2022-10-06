@@ -11,14 +11,20 @@ function createReadyForProduction (serviceLocator) {
     , generateAndCommitChangelog = createChangelogGenerator(serviceLocator)
 
   function readyForProduction (pr, comment, actionValue, skipStatusChecks, cb) {
+    var helpComment
     // only run on release PRs
     if (pr.branch.indexOf('release/') === -1) {
-      var helpComment = '@' + comment.author + ' You are trying to release a ' +
+      helpComment = '@' + comment.author + ' You are trying to release a ' +
         'feature branch, please switch to the release branch and rerun the command.'
       return pr.addComment(helpComment, cb)
     }
     // dont run if already prepared for production
-    if (pr.labels.indexOf('ready-for-production') > -1) return cb()
+    if (pr.labels.indexOf('ready-for-production') > -1) {
+      helpComment = '@' + comment.author + ' This release is already prepared for production.' +
+        ' If the release failed and you are retrying, remove the `ready-for-production` label ' +
+        'and rerun the command.'
+      return pr.addComment(helpComment, cb)
+    }
     pr.getCurrentStatus(function (error, status) {
       if (error) return cb(error)
       var commentToAdd = null

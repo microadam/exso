@@ -26,9 +26,26 @@ describe('release-management ready for staging', function () {
     })
   })
 
-  it('should do nothing if PR is already "ready for staging"', function (done) {
+  it('should let user know the problem if PR is already "ready for staging"', function (done) {
     var readyForStaging = createReadyForStaging()
-    readyForStaging({ branch: 'release/test', labels: [ 'ready-for-staging' ] }, null, null, false, done)
+    , addCommentCalled = false
+      , pr =
+        { branch: 'release/test'
+        , labels: [ 'ready-for-staging' ]
+          , addComment: function (comment, cb) {
+              addCommentCalled = true
+              assert.equal(comment, '@jack This release is already prepared for staging.' +
+            ' If the release failed and you are retrying, remove the `ready-for-staging`'+
+            ' label and rerun the command.')
+              cb()
+            }
+      }
+
+    readyForStaging(pr, {author: 'jack'}, null, false, function (error) {
+      if (error) return done(error)
+      assert.equal(addCommentCalled, true, 'comment was not added')
+      done()
+    })
   })
 
   it('should add a comment to the PR if not passing status checks', function (done) {
