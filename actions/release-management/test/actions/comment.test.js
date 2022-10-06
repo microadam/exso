@@ -23,10 +23,29 @@ describe('release-management comment action', function () {
   })
 
   it('should not pass check when comment does not contain trigger phrase', function (done) {
-    var action = createAction({ authedUser: { username: 'test' } })
-    action.check('created', { body: '@test bla' }, function (error, shouldExec) {
+    var addCommentCalled = false
+      , sl =
+      { authedUser: { username: 'test' }
+        , repoManager: function () {
+          return {
+            getPull: function (_, cb) {
+              cb(null, {
+                addComment: function (commentText, cb) {
+                  addCommentCalled = true
+                  assert.equal(commentText, '@jack Unknown command: `bla`')
+                  cb()
+                }
+              })
+            }
+          }
+        }
+      }
+      , action = createAction(sl)
+
+    action.check('created', { body: '@test bla', author: 'jack' }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
+      assert.equal(addCommentCalled, true, 'comment not added')
       done()
     })
   })

@@ -97,3 +97,27 @@ This will label the Release PR and all the Feature PRs within it with `on-produc
 Please note it is up to you to click the merge button to merge the Release PR into `master`. This should happen once you are happy with the production deployment.
 
 Once merged into `master` the Release PR and all Feature PRs contained within it will be closed and their branches deleted automatically.
+
+## Local Development
+
+This project uses NodeJS 4.4.4 and npm.
+
+Some configuration is required to run the bot locally:
+
+`env.WEBHOOK_SECRET` - this can be absolutely any randomly generated secret
+
+`env.GITHUB_TOKEN` - this must be a personal access token with the full `repo` scope.
+
+`env.URL` - this will be the URL you are given from an `ngrok http 3000`, **without the trailing slash**.
+
+Once you have the server running, head to the setup endpoint:
+
+`/setup/:user/:repo`
+
+e.g.
+
+`https://d0a6-89-151-72-5.ngrok.io/setup/clocklimited/darkroom`
+
+If successful, this should return `OK` and you will have a webhook configured in the repo.
+
+Your local server is now configured to recieve webhooks from your repo.

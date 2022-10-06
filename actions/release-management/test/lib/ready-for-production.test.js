@@ -26,9 +26,26 @@ describe('release-management ready for production', function () {
     })
   })
 
-  it('should do nothing if PR is already "ready for production"', function (done) {
+  it('should let user know the problem if PR is already "ready for production"', function (done) {
     var readyForProduction = createReadyForProduction()
-    readyForProduction({ branch: 'release/test', labels: [ 'ready-for-production' ] }, null, null, false, done)
+    , addCommentCalled = false
+      , pr =
+        { branch: 'release/test'
+        , labels: [ 'ready-for-production' ]
+          , addComment: function (comment, cb) {
+              addCommentCalled = true
+              assert.equal(comment, '@jack This release is already prepared for production.' +
+            ' If the release failed and you are retrying, remove the `ready-for-production`'+
+            ' label and rerun the command.')
+              cb()
+            }
+      }
+
+    readyForProduction(pr, {author: 'jack'}, null, false, function (error) {
+      if (error) return done(error)
+      assert.equal(addCommentCalled, true, 'comment was not added')
+      done()
+    })
   })
 
   it('should add a comment to the PR if not passing status checks', function (done) {

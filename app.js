@@ -27,6 +27,7 @@ loadActions(serviceLocator, function (error, actions) {
 
     serviceLocator.ghApi.users.get({}, function (error, user) {
       if (error) throw error
+      serviceLocator.logger.info('Token authed as ' + user.login)
       serviceLocator.register('authedUser', { username: user.login })
       serviceLocator.server.listen(port, function () {
         serviceLocator.logger.info('Started: ' + url + ':' + port)

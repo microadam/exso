@@ -19,10 +19,29 @@ function createAction (serviceLocator) {
     , checkTriggerPhrase = triggerPhraseChecker(serviceLocator)
     , action =
       { check: function (ghAction, comment, cb) {
-          if (ghAction === 'created' && checkTriggerPhrase(comment.body)) {
+          // Only listen to the `created` comment event
+          if (ghAction !== 'created') {
+            return cb(null, false)
+          }
+          // If the comment contains a trigger phrase then we are good to go
+          if (checkTriggerPhrase(comment.body)) {
             return cb(null, true)
           }
-          cb(null, false)
+          var suffix = '@' + serviceLocator.authedUser.username + ' '
+            , repoManager = serviceLocator.repoManager(comment.repoOwner, comment.repoName)
+          // Ignore anything that isn't directly trying to communicate with the bot
+          if (comment.body.indexOf(suffix) === -1) {
+            return cb(null, false)
+          }
+          // Otherwise, let the user know the command is unknown
+          repoManager.getPull(comment.issueNumber, function (error, pr) {
+            if (error) return cb(error)
+            var unknownCommand = comment.body.replace(suffix, '')
+            pr.addComment('@' + comment.author + ' Unknown command: `' + unknownCommand + '`', function (error) {
+              if (error) return cb(error)
+              cb(null, false)
+            })
+          })
         }
       , exec: function (comment, cb) {
           var repoManager = serviceLocator.repoManager(comment.repoOwner, comment.repoName)
