@@ -5,7 +5,12 @@ var assert = require('assert')
 describe('release-management comment action', function () {
 
   it('should pass check when github action is "created" comment contains trigger phrase', function (done) {
-    var action = createAction({ authedUser: { username: 'test' } })
+    var sl =
+      { authedUser: { username: 'test' }
+        , repoManager: function () {
+        }
+      }
+      , action = createAction(sl)
     action.check('created', { body: '@test add to release' }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, true, 'shouldExec should be true')
@@ -16,6 +21,20 @@ describe('release-management comment action', function () {
   it('should not pass check when github action is not "created"', function (done) {
     var action = createAction({ authedUser: { username: 'test' } })
     action.check('opened', { body: '@test add to release' }, function (error, shouldExec) {
+      if (error) return done(error)
+      assert.equal(shouldExec, false, 'shouldExec should be false')
+      done()
+    })
+  })
+
+  it('should not pass check comment includes bot and is created by bot', function (done) {
+    var sl =
+      { authedUser: { username: 'test' }
+        , repoManager: function () {
+        }
+      }
+      , action = createAction(sl)
+    action.check('created', { body: '@test add to release', author: 'test' }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
       done()
