@@ -8,7 +8,7 @@ function createChangelogGenerator (serviceLocator) {
     var changeLog = buildChangelog(pr.body, version)
       , repoManager = serviceLocator.repoManager(pr.owner, pr.repo)
       , path = 'changelog.md'
-      , commitMessage = 'Update Changelog ***no_ci***'
+      , commitMessage = 'Update Changelog ' + serviceLocator.config.ciSkipFlag
 
     repoManager.getFileContents(path, pr.branch, function (error, currentChangelog, blobSha) {
       if (error && error.code === 404) {

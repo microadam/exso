@@ -20,7 +20,7 @@ describe('release-management node file commiter', function () {
             , content: '{\n  "version": "2.0.0"\n}\n'
             }
           ]
-        , commitMessage: 'v2.0.0 ***no_ci***'
+        , commitMessage: 'v2.0.0 [ci skip]'
         , baseSha: 'abc123'
         , branch: 'release/test'
         }
@@ -33,7 +33,7 @@ describe('release-management node file commiter', function () {
           { repoManager: function () {
               return { getFileContents: getFileContents, updateFiles: updateFiles }
             }
-
+          , config: { ciSkipFlag: '[ci skip]' }
           }
       , makeNodeCommit = createNodeCommiter(sl)
       , pr =
@@ -63,7 +63,7 @@ describe('release-management node file commiter', function () {
             , content: '{\n  "version": "2.0.0"\n}\n'
             }
           ]
-        , commitMessage: 'v2.0.0 ***no_ci***'
+        , commitMessage: 'v2.0.0 [ci skip]'
         , baseSha: 'abc123'
         , branch: 'release/test'
         }
@@ -76,7 +76,7 @@ describe('release-management node file commiter', function () {
           { repoManager: function () {
               return { getFileContents: getFileContents, updateFiles: updateFiles }
             }
-
+          , config: { ciSkipFlag: '[ci skip]' }
           }
       , makeNodeCommit = createNodeCommiter(sl)
       , pr =
@@ -107,7 +107,7 @@ describe('release-management node file commiter', function () {
           { repoManager: function () {
               return { getFileContents: getFileContents, updateFiles: updateFiles }
             }
-
+          , config: { ciSkipFlag: '[ci skip]' }
           }
       , makeNodeCommit = createNodeCommiter(sl)
       , pr =

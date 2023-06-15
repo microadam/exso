@@ -122,6 +122,7 @@ describe('release-management ready for production', function () {
               , updateFile: updateFile
               }
             }
+          , config: { ciSkipFlag: '[ci skip]' }
           }
       , readyForProduction = createReadyForProduction(sl)
       , addCommentCalled = false

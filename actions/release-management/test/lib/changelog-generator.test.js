@@ -27,13 +27,13 @@ describe('release-management changelog generator', function () {
                   '\n====================================\n- [FD #2012] Fix some strange issue\n' +
                   '- [FD #2013] Fix some other issue\n- [PT #12432313] Implement my awesome feature\n' +
                   '- [PT #12432453] Implement my other awesome feature\n\n')
-                assert.equal(commitMessage, 'Update Changelog ***no_ci***')
+                assert.equal(commitMessage, 'Update Changelog [ci skip]')
                 assert.equal(branch, 'release/test')
                 cb(null, 'def456')
               }
               return { createFile: createFile, getFileContents: getFileContents }
             }
-
+          , config: { ciSkipFlag: '[ci skip]' }
           }
       , generateAndCommitChangelog = createChangelogGenerator(sl)
       , pr =
@@ -68,13 +68,13 @@ describe('release-management changelog generator', function () {
                   '- [FD #2013] Fix some other issue\n- [PT #12432313] Implement my awesome feature\n' +
                   '- [PT #12432453] Implement my other awesome feature\n\n' +
                   'v0.0.0 / Sat Jan 01 2000 00:00:00 GMT+0000 (UTC)\n====================================\n\n')
-                assert.equal(commitMessage, 'Update Changelog ***no_ci***')
+                assert.equal(commitMessage, 'Update Changelog [ci skip]')
                 assert.equal(branch, 'release/test')
                 cb(null, 'def456')
               }
               return { updateFile: updateFile, getFileContents: getFileContents }
             }
-
+          , config: { ciSkipFlag: '[ci skip]' }
           }
       , generateAndCommitChangelog = createChangelogGenerator(sl)
       , pr =
