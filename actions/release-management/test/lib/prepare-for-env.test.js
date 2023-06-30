@@ -19,6 +19,7 @@ describe('release-management prepare for env', function () {
               }
               return { getFileContents: getFileContents, updateFiles: updateFiles }
             }
+          , config: { ciSkipFlag: '[ci skip]' }
           }
       , prepareForEnv = createPrepareForEnv(sl)
       , repoManager =
@@ -68,6 +69,7 @@ describe('release-management prepare for env', function () {
               }
               return { getFileContents: getFileContents }
             }
+          , config: { ciSkipFlag: '[ci skip]' }
           }
       , prepareForEnv = createPrepareForEnv(sl)
       , repoManager =

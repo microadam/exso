@@ -41,7 +41,7 @@ function createNodeCommiter (serviceLocator) {
   function updateFiles (results, version, pr, repoManager, cb) {
     var options =
             { files: []
-            , commitMessage: version + ' ***no_ci***'
+            , commitMessage: version + ' ' + serviceLocator.config.ciSkipFlag
             , baseSha: pr.headSha
             , branch: pr.branch
             }

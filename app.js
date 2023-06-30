@@ -8,6 +8,7 @@ var serviceLocator = require('service-locator')()
   , url = process.env.URL
   , port = process.env.PORT || 3000
   , qaWhitelist = (process.env.QA_WHITELIST || '').split(',')
+  , ciSkipFlag = process.env.CI_SKIP_FLAG || '[ci skip]'
   , loadActions = require('./lib/action-loader')
   , bootstrap = require('./bootstrap')
   , createHealthRoute = require('./routes/health')
@@ -15,7 +16,7 @@ var serviceLocator = require('service-locator')()
 
 serviceLocator.register('logger', logger)
 serviceLocator.register('secrets', secrets)
-serviceLocator.register('config', { url: url, qaWhitelist: qaWhitelist })
+serviceLocator.register('config', { url: url, qaWhitelist: qaWhitelist, ciSkipFlag })
 
 loadActions(serviceLocator, function (error, actions) {
   if (error) throw error
