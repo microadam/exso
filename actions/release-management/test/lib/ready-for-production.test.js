@@ -35,7 +35,7 @@ describe('release-management ready for production', function () {
           , addComment: function (comment, cb) {
               addCommentCalled = true
               assert.equal(comment, '@jack This release is already prepared for production.' +
-            ' If the release failed and you are retrying, remove the `ready-for-production`'+
+            ' If the release failed and you are retrying, remove the `ready-for-production`' +
             ' label and rerun the command.')
               cb()
             }

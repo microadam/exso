@@ -35,7 +35,7 @@ describe('release-management ready for staging', function () {
           , addComment: function (comment, cb) {
               addCommentCalled = true
               assert.equal(comment, '@jack This release is already prepared for staging.' +
-            ' If the release failed and you are retrying, remove the `ready-for-staging`'+
+            ' If the release failed and you are retrying, remove the `ready-for-staging`' +
             ' label and rerun the command.')
               cb()
             }

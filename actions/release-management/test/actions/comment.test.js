@@ -27,7 +27,7 @@ describe('release-management comment action', function () {
     })
   })
 
-  it('should not pass check comment includes bot and is created by bot', function (done) {
+  it('should not pass check comment includes bot and is created by bot and contains trigger phrase', function (done) {
     var sl =
       { authedUser: { username: 'test' }
         , repoManager: function () {
@@ -35,6 +35,64 @@ describe('release-management comment action', function () {
       }
       , action = createAction(sl)
     action.check('created', { body: '@test add to release', author: 'test' }, function (error, shouldExec) {
+      if (error) return done(error)
+      assert.equal(shouldExec, true, 'shouldExec should be true')
+      done()
+    })
+  })
+
+  it(
+    'should not pass check comment includes bot and is created by bot' +
+    ' and contains trigger phrase in the middle of comment body'
+    , function (done) {
+    var sl =
+      { authedUser: { username: 'test' }
+        , repoManager: function () {
+        }
+      }
+      , action = createAction(sl)
+    action.check(
+      'created'
+      , { body: '@test foobar baz @test merged into release', author: 'test' }
+      , function (error, shouldExec) {
+        if (error) return done(error)
+        assert.equal(shouldExec, false, 'shouldExec should be false')
+        done()
+      })
+  })
+
+  it(
+    'should not pass check comment includes bot and is created by bot' +
+    ' and contains trigger phrase in the middle of comment body' +
+    'and is the unknown command message'
+    , function (done) {
+    var sl =
+      { authedUser: { username: 'test' }
+        , repoManager: function () {
+        }
+      }
+      , action = createAction(sl)
+    action.check(
+      'created'
+        , { body: '@test Unknown command: foobar baz @test merged into release', author: 'test' }
+      , function (error, shouldExec) {
+        if (error) return done(error)
+        assert.equal(shouldExec, false, 'shouldExec should be false')
+        done()
+      })
+  })
+
+  it(
+    'should not pass check comment includes bot and is created by bot' +
+      ' and does not contain trigger phrase'
+    , function (done) {
+    var sl =
+      { authedUser: { username: 'test' }
+        , repoManager: function () {
+        }
+      }
+      , action = createAction(sl)
+    action.check('created', { body: '@test foobar baz WITH HASTE', author: 'test' }, function (error, shouldExec) {
       if (error) return done(error)
       assert.equal(shouldExec, false, 'shouldExec should be false')
       done()
